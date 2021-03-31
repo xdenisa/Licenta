@@ -1,0 +1,61 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Înregistrare";
+}
+
+<div class="row">
+    <div class="col-md-4 p-4">
+        <form asp-action="Index" asp-controller="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-outline-info">
+                    <input type="radio" name="IsPacient" asp-for="IsPacient" id="option1" autocomplete="off" value="@Boolean.TrueString">Pacient
+                </label>
+                <label class="btn btn-outline-info">
+                    <input type="radio" name="IsPacient" asp-for="IsPacient" id="option2" autocomplete="off" value="@Boolean.FalseString">Medic
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDay" class="control-label"></label>
+                <input asp-for="BirthDay" class="form-control" type="date" value="01/01/2021" />
+                <span asp-validation-for="BirthDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sex" class="control-label"></label>
+                <select asp-for="Sex" class="form-control">
+                    <option value="clear">Alegeți sexul</option>
+                    <option value="masculin">Masculin</option>
+                    <option value="feminin">Feminin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Înregistrare" class="btn btn-info" />
+            </div>
+        </form>
+    </div>
+</div>

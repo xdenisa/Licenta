@@ -1,0 +1,20 @@
+﻿@model Guid
+
+<div class="pos-f-t">
+    <nav class="navbar navbar-dark navbarcustom">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+    <div class="collapse" id="navbarToggleExternalContent">
+        <div class="navbarcustom">
+            <ul class="navbar-nav" id="menu">
+                <li><a class="menu-item" asp-controller="Patient" asp-action="Profile" asp-route-idPatient="@Model"><p>PROFIL</p></a></li>
+                <li><a class="menu-item" asp-controller="Patient" asp-action="Portfolio" asp-route-idPatient="@Model"><p>DOSAR</p></a></li>
+                <li><a class="menu-item" asp-controller="Patient" asp-action="Medicines" asp-route-idPatient="@Model"><p>MEDICAMENTE</p></a></li>
+                <li><a class="menu-item" asp-controller="Patient" asp-action="Medics" asp-route-idPatient="@Model"><p>MEDICI</p></a></li>
+                <li><a class="menu-item" asp-controller="Patient" asp-action="Appointments" asp-route-idPatient="@Model"><p>PROGRAMĂRI</p></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

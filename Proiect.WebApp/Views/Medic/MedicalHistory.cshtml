@@ -1,0 +1,22 @@
+﻿@model Patient
+
+<div class="container mt-4">
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Vizualizare și adăugare dosar medical pacient</h5>
+            <a class="btn btn-outline-info" asp-controller="Medic" asp-action="PatientHistory" asp-route-idPatient="@Model.Id">Dosar</a>
+        </div>
+    </div>
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Vizualizare și adăugare medicamente pacient</h5>
+            <a class="btn btn-outline-info" asp-controller="Medic" asp-action="PatientMedicine" asp-route-idPatient="@Model.Id">Medicamente</a>
+        </div>
+    </div>
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Contactare pacient prin email</h5>
+            <email email="@Model.Person.Email" body="Email pacient"></email>
+        </div>
+    </div>
+</div>

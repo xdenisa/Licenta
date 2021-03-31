@@ -1,0 +1,26 @@
+﻿@inject LoginViewModel UserLogIn
+
+@if (UserLogIn.IsLogedIn)
+{
+
+    if (bool.Parse(UserLogIn.IsPacient))
+    {
+        <li class="nav-item"><a class="nav-link navitems" asp-controller="Patient" asp-action="Index" asp-route-idPerson="@UserLogIn.Id">Meniu</a></li>
+    }
+    else
+    {
+        <li class="nav-item"><a class="nav-link navitems" asp-controller="Medic" asp-action="Index" asp-route-idPerson="@UserLogIn.Id">Meniu</a></li>
+    }
+    if (UserLogIn.IsAdmin)
+    {
+        <li class="nav-item"><a class="nav-link navitems" asp-controller="Medic" asp-action="Admin" asp-route-idPerson="@UserLogIn.Id">Meniu admin</a></li>
+    }
+
+
+    <li class="nav-item"><a class="nav-link navitems" asp-controller="Login" asp-action="Logout">Deconectare</a></li>
+}
+else
+{
+    <li class="nav-item"><a class="nav-link navitems" asp-controller="Login" asp-action="Index">Autentificare</a></li>
+    <li class="nav-item"><a class="nav-link navitems" asp-controller="Register" asp-action="Index">Înregistrare</a></li>
+}

@@ -1,0 +1,41 @@
+﻿@model AppointmentMedicViewModel
+
+@{
+    ViewData["Title"] = "Pacienți";
+}
+
+<partial name="_MedicPartial" model="Model.Medic" />
+
+
+@foreach (var appointment in Model.Appointments)
+{
+
+    <div id="patientsBody">
+
+    </div>
+
+    <input type="hidden" id="idMedic" value="@appointment.IdMedic" />
+    <partial name="_PacientProfileModal" model="appointment.Patient" />
+
+}
+
+<script id="patients-template" type="text/x-handlebars-template">
+    <div class="card">
+        <div class="card-header">
+            {{patient.person.firstName}} {{patient.person.lastName}}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{appointmentDate}}</h5>
+            <p class="card-text">{{details}}</p>
+            <p class="card-text">{{type}}</p>
+            <button data-id="exampleModal{{idPatient}}" type="button" class="btn btn-outline-success modalButton">
+                Vizualizare profil pacient
+            </button>
+            <a href="/Medic/MedicalHistory/{{idPatient}}" class="btn btn-outline-info">Istoric medical pacient</a>
+        </div>
+    </div>
+</script>
+
+
+
+<script src="/lib/js/Patients.js"></script>

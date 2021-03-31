@@ -1,0 +1,47 @@
+﻿@model PortfolioViewModel
+
+@{
+    ViewData["Title"] = "Dosar";
+}
+
+<partial name="_PacientPartial" model="@Model.Patient.Id" />
+
+<div class="row">
+    <div class="col-md-4 p-4">
+        <form asp-action="Portfolio" asp-controller="Patient" enctype="multipart/form-data" role="form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="custom-file">
+                <label class="control-label">Documente</label>
+                <input asp-for="Document" type="file" class="custom-file-input" id="customFile">
+                <label asp-for="Document" class="custom-file-label" for="customFile">Alege document</label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observations" class="control-label">Observații</label>
+                <input asp-for="Observations" class="form-control" />
+                <span asp-validation-for="Observations" class="text-danger"></span>
+            </div>
+            <input asp-for="Patient.Id" type="hidden" />
+            <div class="form-group">
+                <input type="submit" value="Adăugare" class="btn btn-info" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Portfolio.Any())
+{
+    foreach (var result in Model.Portfolio)
+    {
+        <div class="container">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Document adăugat la data: @result.DateOfIssue <hr />
+                    <a class="badge badge-dark" href="#">Vizualizare</a> <hr />
+                    <button onclick="deletePortfolio()" id="btnDeletePortfolio" data-id="@result.Id" data-patient="@Model.Patient.Id" class="badge badge-danger">Ștergere</button>
+                </li>
+            </ul>
+        </div>
+    }
+}
+
+<script src="~/lib/js/Delete.js"></script>

@@ -1,0 +1,13 @@
+﻿@model MedicsForPatientsViewModel
+
+<partial name="_PacientPartial" model="@Model.Patient.Id" />
+
+@foreach (var medic in Model.Medics)
+{
+    if (medic.IsApproved==bool.TrueString)
+    { <div class="card partial-card">
+        <partial name="_MedicPartialCard" model="medic" />
+        <a asp-controller="Patient" asp-action="MakeAppointment" asp-route-idPatient="@Model.Patient.Id" asp-route-idMedic="@medic.Id" class="btn btn-outline-info btn-appointment">Progamare</a>
+    </div>
+    }
+}

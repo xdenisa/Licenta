@@ -1,0 +1,38 @@
+﻿@inject Proiect.WebApp.Models.Account.LoginViewModel UserLogIn
+@model Medic
+
+@{
+    ViewData["Title"] = "Meniu";
+}
+
+@if (UserLogIn.IsLogedIn)
+{
+    <partial name="_MedicPartial" model="@Model" />
+
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Editare profil</h5>
+            <p class="card-text">Editează-ți datele de profil.</p>
+            <a class="btn btn-outline-info" asp-controller="Medic" asp-action="Profile" asp-route-idMedic="@Model.Id">Profil</a>
+        </div>
+    </div>
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Vizualizare programări</h5>
+            <p class="card-text">Vizualizează-ți programările active</p>
+            <a class="btn btn-outline-info" asp-controller="Medic" asp-action="Appointments" asp-route-idMedic="@Model.Id">Programări</a>
+        </div>
+    </div>
+    <div class="card text-center">
+        <div class="card-body">
+            <h5 class="card-title">Vizualizare pacienți</h5>
+            <p class="card-text">Vizualizează-ți pacienții consultați</p>
+            <a class="btn btn-outline-info" asp-controller="Medic" asp-action="Patients" asp-route-idMedic="@Model.Id">Pacienți</a>
+        </div>
+    </div>
+
+}
+
+
+
+

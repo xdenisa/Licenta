@@ -1,0 +1,106 @@
+﻿.profile-img {
+    height: 200px;
+    width: 400px;
+    border:1px black;
+}
+
+.profile{
+    width:50%;
+}
+
+.image-specialization-card{
+    width:100px;
+    height:100px;
+    align-self:center;
+}
+
+.image-card {
+    width: 40%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.partial-card{
+    margin: 10px 90px 0px 90px;
+}
+
+.specialization-card {
+    width:22rem;
+    height:20rem;
+    border-radius:14px;
+    margin:0px 20px 0px 20px;
+}
+
+.btn-appointment{
+    width:150px;
+    margin-bottom:10px;
+    position:relative;
+    left:150px;
+}
+
+.btn-round {
+    border-radius: 12px;
+}
+
+.menu-item
+{    
+    color:midnightblue;
+}
+
+.contact-controller{
+    padding:30px;
+}
+
+.navbarcustom {
+    background-color: darkcyan;
+    font-weight: bold;
+}
+
+.navitems {
+    font-weight:bold;
+    color: midnightblue;
+}
+
+#imagineLogo{
+   height:40%;
+   width:40%;
+   object-fit:contain;
+}
+
+.carousel-item{
+    height:32em;
+    position:relative;
+    color:wheat;
+    background:#777;
+}
+
+.containercarousel{
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    padding-bottom:50px;
+}
+
+.overlay-image {
+    background-position: center;
+    background-size: cover;
+    width:100%;
+    height:100%;
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    top:0;
+    object-fit:fill;
+    opacity:0.7;
+}
+
+/*.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;*/ /* Vertically center the text there */
+    /*background-color: #212529;
+}*/

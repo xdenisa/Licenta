@@ -1,0 +1,50 @@
+﻿@model MedicalHistoryViewModel
+
+<div class="container m-3">
+    <form asp-action="AddMedicine" asp-controller="Medic" enctype="multipart/form-data" role="form" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-row">
+            <div class="col">
+                <input asp-for="Observations" type="text" class="form-control" placeholder="Observații">
+            </div>
+            <div class="col">
+                <input asp-for="Administration" type="text" class="form-control" placeholder="Mod administrare">
+            </div>
+            <div class="col">
+                <input asp-for="NumberOfDays" type="text" class="form-control" placeholder="Zile de tratament">
+            </div>
+            <div class="col">
+                <input asp-for="Name" type="text" class="form-control" placeholder="Denumire medicament">
+            </div>
+            <input asp-for="IdPatient" type="hidden" />
+            <input asp-for="IdMedic" type="hidden" />
+            <div class="col">
+                <input type="submit" value="Adăugare medicament" class="btn btn-info" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (Model.Medicines.Any())
+{
+    <div class="container m-3">
+        @foreach (var medicine in Model.Medicines)
+        {
+            <div class="card text-center m-3">
+                <div class="card-header">
+                    @Model.Patient.Person.LastName @Model.Patient.Person.FirstName
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@medicine.Medicine.Name</h5>
+                    <p class="card-text">@medicine.Medicine.AdministrationMethod</p>
+                    <p class="card-text">@medicine.Treatment.Observations</p>
+                    <a asp-action="EditMedicineMedic" asp-controller="Medic" asp-route-idMedicine="@medicine.Medicine.Id"
+                       asp-route-idMedic="@Model.IdMedic" class="btn btn-outline-primary">Editează detaliile medicament</a>
+                </div>
+                <div class="card-footer text-muted">
+                    @medicine.Treatment.NumberOfDays zile tratament
+                </div>
+            </div>
+        }
+    </div>
+}

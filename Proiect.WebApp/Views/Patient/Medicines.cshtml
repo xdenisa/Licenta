@@ -1,0 +1,39 @@
+﻿@model MedicineViewModel
+
+@{
+    ViewData["Title"] = "Medicamente";
+}
+
+<partial name="_PacientPartial" model="@Model.Patient.Id" />
+
+<div class="container">
+    <a class="btn btn-outline-success mt-3" href="/Patient/AddMedicine/@Model.Patient.Id">Adăugare medicament</a>
+    @if (Model.Medicines.Any())
+    {
+        <div class="container m-3">
+            @foreach (var medicine in Model.Medicines)
+            {
+                <div class="card text-center m-3">
+                    <div class="card-header">
+                        @Model.Patient.LastName @Model.Patient.FirstName
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@medicine.Medicine.Name</h5>
+                        <p class="card-text">@medicine.Medicine.AdministrationMethod</p>
+                        <p class="card-text">@medicine.Treatment.Observations</p>
+                        <button onclick="deleteMedicine()" id="btnDeleteMedicine" data-id="@medicine.Treatment.Id" 
+                                data-patient="@Model.Patient.Id" class="btn btn-outline-danger">Întrerupe medicația</button>
+                        <a asp-action="EditMedicine" asp-controller="Patient" asp-route-idMedicine="@medicine.Medicine.Id"
+                           asp-route-idPatient="@Model.Patient.Id" class="btn btn-outline-primary">Editează detaliile medicament</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        @medicine.Treatment.NumberOfDays zile tratament
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script src="~/lib/js/Delete.js"></script>
+

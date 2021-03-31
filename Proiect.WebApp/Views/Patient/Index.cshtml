@@ -1,0 +1,50 @@
+﻿@inject Proiect.WebApp.Models.Account.LoginViewModel UserLogIn
+@model PatientViewModel
+
+@{
+    ViewData["Title"] = "Meniu";
+}
+
+@if (UserLogIn.IsLogedIn)
+{
+    <partial name="_PacientPartial" model="@Model.Id"/>
+
+    <div class="controller-cards">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Editare profil</h5>
+                <p class="card-text">Editează-ți datele de profil.</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Profile" asp-route-idPatient="@Model.Id">Profil</a>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Vizualizare programări</h5>
+                <p class="card-text">Vizualizează-ți programările active</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Appointments" asp-route-idPatient="@Model.Id">Vizualizare</a>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Înregistrează medicația</h5>
+                <p class="card-text">Înregistrează medicația curentă</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Medicines" asp-route-idPatient="@Model.Id">Medicamente</a>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Dosar medical</h5>
+                <p class="card-text">Actualizează-ți sau verifică-ți dosarul medical</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Portfolio" asp-route-idPatient="@Model.Id">Dosar</a>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-body">
+                <h5 class="card-title">Vizualizează medicii</h5>
+                <p class="card-text">Caută personalul medical de care ai nevoie</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Medics" asp-route-idPatient="@Model.Id">Medici</a>
+            </div>
+        </div>
+    </div>
+
+}

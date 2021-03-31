@@ -1,0 +1,8 @@
+﻿@model Specialization
+
+<img class="card-img-top image-specialization-card" src="data:@Model.Image.MimeType;base64,@(Convert.ToBase64String(Model.Image._Image))" alt="Image" />
+<div class="card-body text-centered">
+    <h5 class="card-title">@Model.Name</h5>
+    <p class="card-text">@Model.Image.Description</p>
+</div>
+

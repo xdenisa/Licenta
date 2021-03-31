@@ -1,0 +1,21 @@
+﻿@model PatientViewModel
+
+<div>
+    @if (Model.Image != null)
+    {
+        <div class="container">
+            <img class="card-img-top profile-img" src="data:@Model.Image.MimeType;base64,@(Convert.ToBase64String(Model.Image._Image))" alt="Image Profil" />
+            <a class="btn btn-danger" asp-action="DeleteProfilePicture" asp-controller="Patient" asp-route-idImage="@Model.IdImage" asp-route-idPatient="@Model.Id">Șterge poza de profil</a>
+        </div>
+    }
+    <div class="card-body">
+        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Data nașterii: @Model.BirthDay</li>
+        <li class="list-group-item">Telefon: @Model.PhoneNumber</li>
+        <li class="list-group-item">Email: @Model.Email</li>
+        <li class="list-group-item">Sex: @Model.Sex</li>
+        <li class="list-group-item">Adresă: @Model.Address</li>
+    </ul>
+</div>

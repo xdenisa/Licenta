@@ -1,0 +1,22 @@
+﻿@model MedicsForPatientsViewModel
+
+@{
+    ViewData["Title"] = "Medici";
+}
+
+<partial name="_PacientPartial" model="@Model.Patient.Id" />
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        @foreach (var specializare in Model.Specializations)
+        {
+            <div class="col-md-4 p-4">
+                <div class="card shadow specialization-card">
+                    <partial name="_SpecializationCard" model="specializare" />
+                    <a asp-controller="Patient" asp-action="MedicCard" asp-route-specializationName="@specializare.Name" asp-route-idPatient="@Model.Patient.Id" class="btn btn-info btn-round">Afișare medici</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

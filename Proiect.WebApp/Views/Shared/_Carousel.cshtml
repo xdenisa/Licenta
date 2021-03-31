@@ -1,0 +1,58 @@
+﻿@inject Proiect.WebApp.Models.Account.LoginViewModel UserLogIn
+
+<div id="myCarousel" class="carousel carousel-fade" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="myCarousel" data-slide-to="1"></li>
+        <li data-target="myCarousel" data-slide-to="2"></li>
+        @if (!UserLogIn.IsLogedIn)
+        {<li data-target="myCarousel" data-slide-to="3"></li>}
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-interval="5000">
+            <img class="overlay-image" src="~/images/medic.jpg" />
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Programarea unei consultații la un click distanță</h5>
+                <p>Aplicația oferă posibilitatea de a cere o consultație medicală unui medic specialist direct din cadrul platformei.</p>
+            </div>
+        </div>
+        <div class="carousel-item" data-interval="5000">
+            <img class="overlay-image" src="~/images/medicine.jpg" />
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Înregistrează-ți medicația</h5>
+                <p>Prin intermediul aplicației îți poți înregistra medicamentele administrate zilnic.</p>
+            </div>
+        </div>
+        <div class="carousel-item" data-interval="5000">
+            <img class="overlay-image" src="~/images/stethoscope.jpg" />
+            <div class="carousel-caption">
+                <h5>Cere sfatul unui medic</h5>
+                <p>Poți apela la un medic pentru interpretarea analizelor sau pentru a cere o a doua opinie medicală.</p>
+            </div>
+        </div>
+        @if (!UserLogIn.IsLogedIn)
+        {
+            <div class="carousel-item" data-interval="5000">
+            <img src="~/images/register.jpg" class="overlay-image" />
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Încearcă acum!</h5>
+                <div class="div-buttons">
+                    <a asp-controller="Login" asp-action="Index" class="btn btn-info">Autentificare</a>
+                    <a asp-controller="Register" asp-action="Index" class="btn btn-info">Înregistrare</a>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    <a href="#myCarousel" class="carousel-control-prev" role="button" data-slide="prev">
+        <span class="sr-only">Previous</span>
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </a>
+    <a href="#myCarousel" class="carousel-control-next" role="button" data-slide="next">
+        <span class="sr-only">Next</span>
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>
+</div>
+
+
+

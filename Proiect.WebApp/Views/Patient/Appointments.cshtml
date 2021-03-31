@@ -1,0 +1,56 @@
+﻿@model AppointmentPatientViewModel
+
+@{
+    ViewData["Title"] = "Programări";
+}
+
+<partial name="_PacientPartial" model="@Model.Patient.Id" />
+@foreach (var appointment in Model.Appointments)
+{
+    var id = $"exampleModal" + appointment.IdMedic;
+
+    <div id="appointmentsPacientBody">
+
+    </div>
+
+    <input type="hidden" id="idPatient" value="@appointment.IdPatient" />
+
+    <div class="modal fade" id="@id" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <partial name="_MedicProfileCard" model="appointment.Medic" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script id="appointmentsPacient-template" type="text/x-handlebars-template">
+    <div class="card">
+        <div class="card-header">
+            {{medic.person.firstName}} {{medic.person.lastName}}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{appointmentDate}}</h5>
+            <p class="card-text">{{details}}</p>
+            <p class="card-text">{{type}}</p>
+            <button type="button" data-id="exampleModal{{idMedic}}" class="btn btn-outline-success modalButton">
+                Vizualizare profil medic
+            </button>
+            <button onclick="deletePatientAppointment()" id="btnDeletePatientAppointment" data-id="{{id}}" data-patient="{{idPatient}}"
+                    class="btn btn-outline-danger">Anulează programarea
+            </button>
+            <a href="/Patient/EditAppointment/{{id}}" class="btn btn-outline-primary">Editează detaliile programării</a>
+        </div>
+    </div>
+</script>
+
+
+<script src="/lib/js/AppointmentsPatient.js"></script>
+<script src="~/lib/js/Delete.js"></script>

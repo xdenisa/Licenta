@@ -1,0 +1,37 @@
+﻿@model MedicalHistoryViewModel
+
+<div class="container m-3">
+    <form asp-action="AddPortfolio" asp-controller="Medic" enctype="multipart/form-data" role="form" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="custom-file">
+            <label class="control-label">Documente</label>
+            <input asp-for="Document" type="file" class="custom-file-input" id="customFile">
+            <label asp-for="Document" class="custom-file-label" for="customFile">Alege document</label>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <input asp-for="Observations" type="text" class="form-control" placeholder="Observații">
+            </div>
+            <input asp-for="IdPatient" type="hidden" />
+            <div class="col">
+                <input type="submit" value="Adăugare document" class="btn btn-info" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@if (Model.Results.Any())
+{
+    foreach (var result in Model.Results)
+    {
+        <div class="container mt-3">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Document adăugat la data: @result.DateOfIssue <hr />
+                    <a class="badge badge-dark" href="#">Vizualizare</a> <hr />
+                </li>
+            </ul>
+        </div>
+    }
+}

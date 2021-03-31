@@ -1,0 +1,37 @@
+﻿@model AppointmentMedicViewModel
+
+@{
+    ViewData["Title"] = "Programări";
+}
+
+<partial name="_MedicPartial" model="Model.Medic" />
+
+
+@foreach (var appointment in Model.Appointments)
+{
+    <div id="appointmentsBody">
+
+    </div>
+    <input type="hidden" id="idMedicAppointments" value="@appointment.IdMedic" />
+    <partial name="_PacientProfileModal" model="appointment.Patient" />
+}
+
+<script id="appointments-template" type="text/x-handlebars-template">
+    <div class="card">
+        <div class="card-header">
+            {{patient.person.firstName}} {{patient.person.lastName}}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{appointmentDate}}</h5>
+            <p class="card-text">{{details}}</p>
+            <p class="card-text">{{type}}</p>
+            <button data-id="exampleModal{{idPatient}}" type="button" class="btn btn-outline-success modalButton">
+                Vizualizare profil pacient
+            </button>
+            <button onclick="deleteAppointment()" id="btnDeleteAppointment" data-id="{{id}}" data-medic="{{idMedic}}" class="btn btn-outline-danger">Refuză programarea</button>
+        </div>
+    </div>
+</script>
+
+<script src="/lib/js/Appointments.js"></script>
+<script src="~/lib/js/Delete.js"></script>

@@ -1,0 +1,84 @@
+﻿@model PatientProfileViewModel
+
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<partial name="_PacientPartial" model="@Model.Patient.Id" />
+
+<div class="card shadow float-left profile">
+    <div class="card-body text-center">
+        <h5 class="card-title">@Model.Patient.FirstName @Model.Patient.LastName</h5>
+        <div class="row">
+            <div class="text-center ml-xl-5">
+                <form asp-action="ProfilePut" asp-controller="Patient" enctype="multipart/form-data" role="form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="container mb-3">
+                        <a class="btn btn-info" asp-action="ChangePassword" asp-controller="Patient" asp-route-idPatient="@Model.Patient.Id">Schimbă parola</a>
+                    </div>
+                    <div class="custom-file">
+                        <input asp-for="Image" type="file" class="custom-file-input" id="customFile">
+                        <label asp-for="Image" class="custom-file-label" for="customFile">Poză profil</label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Patient.Email" class="control-label"></label>
+                        <input asp-for="Patient.Email" class="form-control" />
+                        <span asp-validation-for="Patient.Email" class="text-danger"></span>
+                    </div>
+                        <input asp-for="Password" type="hidden" />
+                    <div class="form-group">
+                        <label asp-for="Patient.FirstName" class="control-label">Prenume</label>
+                        <input asp-for="Patient.FirstName" class="form-control" />
+                        <span asp-validation-for="Patient.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Patient.LastName" class="control-label">Nume</label>
+                        <input asp-for="Patient.LastName" class="form-control" />
+                        <span asp-validation-for="Patient.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Patient.BirthDay" class="control-label">Data nașterii</label>
+                        <input asp-for="Patient.BirthDay" class="form-control" type="date" />
+                        <span asp-validation-for="Patient.BirthDay" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Patient.Sex" class="control-label">Sex</label>
+                        <select asp-for="Patient.Sex" class="form-control">
+                            <option value="Masculin">Masculin</option>
+                            <option value="Feminin">Feminin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Patient.PhoneNumber" class="control-label">Telefon</label>
+                        <input asp-for="Patient.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Patient.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Patient.Address" class="control-label">Adresă</label>
+                        <input asp-for="Patient.Address" class="form-control" />
+                        <span asp-validation-for="Patient.Address" class="text-danger"></span>
+                    </div>
+
+                    <input asp-for="Patient.Id" type="hidden" id="idPatientInput"/>
+                    <input asp-for="Patient.IdPerson" type="hidden" />
+                    @if (Model.Patient.Image != null)
+                    {
+                        <input asp-for="Patient.IdImage" type="hidden" />}
+                    <div class="form-group">
+                        <input type="submit" value="Salvează" class="btn btn-info" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow text-center float-right profile">
+    <partial name="_PatientProfileCard" model="@Model.Patient" />
+    <div class="card-body">
+        <button onclick="deletePatientProfile()" class="btn btn-danger">Șterge contul</button>
+    </div>
+</div>
+
+<script src="~/lib/js/Delete.js"></script>

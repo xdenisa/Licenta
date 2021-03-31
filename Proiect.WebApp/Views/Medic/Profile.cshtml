@@ -1,0 +1,115 @@
+﻿@model MedicProfileViewModel
+
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<partial name="_MedicPartial" model="@Model.Medic" />
+
+<div class="card shadow float-left profile">
+    <div class="card-body text-center">
+        <h5 class="card-title">@Model.Medic.Person.FirstName @Model.Medic.Person.LastName</h5>
+        <div class="row">
+            <div class="text-center ml-xl-5">
+                <form asp-action="ProfilePut" asp-controller="Medic" enctype="multipart/form-data" role="form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="container mb-3">
+                        <a class="btn btn-info" asp-action="ChangePassword" asp-controller="Medic" asp-route-idMedic="@Model.Medic.Id">Schimbă parola</a>
+                    </div>
+                    <div class="custom-file">
+                        <input asp-for="Image" type="file" class="custom-file-input" id="customFile">
+                        <label asp-for="Image" class="custom-file-label" for="customFile">Poză profil</label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Person.Email" class="control-label"></label>
+                        <input asp-for="Medic.Person.Email" class="form-control" />
+                        <span asp-validation-for="Medic.Person.Email" class="text-danger"></span>
+                    </div>
+                    <input asp-for="Medic.Person.Password" type="hidden" />
+                    <div class="form-group">
+                        <label asp-for="Medic.Person.FirstName" class="control-label">Prenume</label>
+                        <input asp-for="Medic.Person.FirstName" class="form-control" />
+                        <span asp-validation-for="Medic.Person.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Person.LastName" class="control-label">Nume</label>
+                        <input asp-for="Medic.Person.LastName" class="form-control" />
+                        <span asp-validation-for="Medic.Person.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Person.BirthDay" class="control-label">Data nașterii</label>
+                        <input asp-for="Medic.Person.BirthDay" class="form-control" type="date" />
+                        <span asp-validation-for="Medic.Person.BirthDay" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Person.Sex" class="control-label">Sex</label>
+                        <select asp-for="Medic.Person.Sex" class="form-control">
+                            <option value="Masculin">Masculin</option>
+                            <option value="Feminin">Feminin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Person.PhoneNumber" class="control-label">Telefon</label>
+                        <input asp-for="Medic.Person.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Medic.Person.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.IdentificationCode" class="control-label">Cod Identificare</label>
+                        <input asp-for="Medic.IdentificationCode" class="form-control" />
+                        <span asp-validation-for="Medic.IdentificationCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.MedicalCollegeYear" class="control-label">Colegiul Medicilor</label>
+                        <input asp-for="Medic.MedicalCollegeYear" class="form-control" />
+                        <span asp-validation-for="Medic.MedicalCollegeYear" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.IdSpecialization" class="control-label">Specializare</label>
+                        <select asp-for="Medic.IdSpecialization" class="form-control" asp-items="@Model.Specializations"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Hospital" class="control-label">Spital</label>
+                        <input asp-for="Medic.Hospital" class="form-control" />
+                        <span asp-validation-for="Medic.Hospital" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Abilities" class="control-label">Competențe</label>
+                        <input asp-for="Medic.Abilities" class="form-control" />
+                        <span asp-validation-for="Medic.Abilities" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Education" class="control-label">Studii</label>
+                        <input asp-for="Medic.Education" class="form-control" />
+                        <span asp-validation-for="Medic.Education" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Description" class="control-label">Descriere</label>
+                        <input asp-for="Medic.Description" class="form-control" />
+                        <span asp-validation-for="Medic.Description" class="text-danger"></span>
+                    </div>
+                    <input asp-for="Medic.Id" type="hidden" id="idMedicInput" />
+                    <input asp-for="Medic.IdPerson" type="hidden" />
+                    <input asp-for="Medic.Person.Id" type="hidden" />
+                    <input asp-for="Medic.IsApproved" type="hidden" />
+                    @if (Model.Medic.Image != null)
+                    {
+                        <input asp-for="Medic.IdImage" type="hidden" />
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Salvează" class="btn btn-info" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card shadow text-center float-right profile">
+    <partial name="_MedicProfileCard" model="@Model.Medic" />
+    <div class="card-body">
+        <button onclick="deleteProfile()" class="btn btn-danger">Șterge contul</button>
+    </div>
+</div>
+
+<script src="~/lib/js/Delete.js"></script>

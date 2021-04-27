@@ -9,7 +9,7 @@ namespace Proiect.WebApp.Models
     public class AppointmentMedicViewModel
     { 
         public IEnumerable<Appointment> Appointments { get; set; }
-        public Medic Medic { get; set; }
+        public MedicViewModel Medic { get; set; }
 
     }
 }

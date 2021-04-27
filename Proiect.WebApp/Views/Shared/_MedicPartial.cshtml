@@ -1,4 +1,4 @@
-﻿@model Medic
+﻿@model Guid
 
 <div class="pos-f-t">
     <nav class="navbar navbar-dark navbarcustom">
@@ -9,9 +9,9 @@
     <div class="collapse" id="navbarToggleExternalContent">
         <div class="navbarcustom">
             <ul class="navbar-nav" id="menu">
-                <li><a class="menu-item" asp-controller="Medic" asp-action="Profile" asp-route-idMedic="@Model.Id" ><p>PROFIL</p></a></li>
-                <li><a class="menu-item" asp-controller="Medic" asp-action="Appointments" asp-route-idMedic="@Model.Id"><p>PROGRAMĂRI</p></a></li>
-                <li><a class="menu-item" asp-controller="Medic" asp-action="Patients" asp-route-idMedic="@Model.Id"><p>PACIENȚI</p></a></li>
+                <li><a class="menu-item" asp-controller="Medic" asp-action="Profile" asp-route-idMedic="@Model" ><p>PROFIL</p></a></li>
+                <li><a class="menu-item" asp-controller="Medic" asp-action="Appointments" asp-route-idMedic="@Model"><p>PROGRAMĂRI</p></a></li>
+                <li><a class="menu-item" asp-controller="Medic" asp-action="Patients" asp-route-idMedic="@Model"><p>PACIENȚI</p></a></li>
             </ul>
         </div>
     </div>

@@ -119,5 +119,25 @@ namespace Proiect.BusinessLogic
 
             return patients;
         }
+
+        public object getPatientEmailByAppointment(Guid idAppointment)
+        {
+            var appointment = unitOfWork.Appointments.Get()
+                .Include(m => m.Medic)
+                .ThenInclude(m => m.Person)
+                .Include(p=>p.Patient)
+                .ThenInclude(p=>p.Person)
+                .First(id => id.Id == idAppointment);
+            var patient = unitOfWork.Patients.Get()
+                .First(id => id.Id == appointment.IdPatient);
+            return new
+            {
+                Email = patient.Person.Email,
+                AppointmentDate=appointment.AppointmentDate,
+                Medic=appointment.Medic.Person.FirstName+" "+appointment.Medic.Person.LastName,
+                MedicEmail=appointment.Medic.Person.Email,
+                Patient=appointment.Patient.Person.FirstName+" "+appointment.Patient.Person.LastName
+            };
+        }
     }
 }

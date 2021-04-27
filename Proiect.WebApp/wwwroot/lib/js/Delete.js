@@ -86,25 +86,6 @@ function deleteAppointment() {
     }
 }
 
-function deletePatientAppointment() {
-    let idPatient = $("#btnDeletePatientAppointment").data("patient");
-    let id = $("#btnDeletePatientAppointment").data("id");
-    var okay = confirm("Sunteți sigur(ă) că doriți să anulați programarea?");
-    if (okay) {
-        $.ajax({
-            type: "DELETE",
-            url: `/Patient/DeleteAppointment`,
-            data: {
-                idPatient: idPatient,
-                idAppointment: id
-
-            },
-            success: reloadPage,
-            error: console.log
-        });
-    }
-}
-
 function deleteMedicine() {
     let idPatient = $("#btnDeleteMedicine").data("patient");
     let id = $("#btnDeleteMedicine").data("id");

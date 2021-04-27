@@ -81,15 +81,15 @@ namespace Proiect.BusinessLogic
                 .FirstOrDefault(i => i.Id.ToString() == id);
         }
 
-        public void UpdateProfilePicture(Medic medic, Image image)
-        {
-            if (medic.Image != null)
-            {
-                imageService.DeleteImage(medic.Image);
-            }
-            medic.IdImage = image.Id;
-            medic.Image = image;
-        }
+        //public void UpdateProfilePicture(Medic medic, Image image)
+        //{
+        //    if (medic.Image != null)
+        //    {
+        //        imageService.DeleteImage(medic.Image);
+        //    }
+        //    medic.IdImage = image.Id;
+        //    medic.Image = image;
+        //}
 
         public Medic GetMedicForLogin(string email)
         {
@@ -98,16 +98,18 @@ namespace Proiect.BusinessLogic
                 .First(e => e.Person.Email == email);
         }
 
-        public void UpdateMedic(Medic medic)
+        public void UpdateMedic(Medic medic,Image image)
         {
             var medicContext = mapper.Map<Medic>(medic);
-
-            if (medic.Image != null)
+            if(image!=null)
             {
-                medicContext.IdImage = medic.Image.Id;
-                medicContext.Image = medic.Image;
+                if(medic.Image!=null)
+                {
+                    imageService.DeleteImage(medic.Image);
+                }
+                medicContext.IdImage = image.Id;
+                medicContext.Image = image;
             }
-
             unitOfWork.Medics.Update(medicContext);
             unitOfWork.SaveChanges();
         }

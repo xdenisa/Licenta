@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MailKit.Security;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Proiect.BusinessLogic;
 using Proiect.DataAccess.EntityFramework;
 using Proiect.Entities;
@@ -9,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace Proiect.WebApp.Controllers
@@ -82,7 +87,6 @@ namespace Proiect.WebApp.Controllers
             }
         }
 
-        //[HttpPut]
         public IActionResult ProfilePut(PatientProfileViewModel patientProfileViewModel)
         {
             if (ModelState.IsValid)
@@ -316,7 +320,8 @@ namespace Proiect.WebApp.Controllers
         public JsonResult GetAppointments(int toSkip, Guid idPatient)
         {
             var appointments = appointmentService.GetAppointmentsByPatientIdJson(idPatient, toSkip);
-            return Json(appointments);
+            var appointmentsViewModel = mapper.Map<IEnumerable<AppointmentsViewModel>>(appointments);
+            return Json(appointmentsViewModel);
         }
 
         [HttpGet]
@@ -371,14 +376,19 @@ namespace Proiect.WebApp.Controllers
             }
         }
 
-        [HttpDelete]
+       [Route("/Patient/DeleteAppointment/{idAppointment}/{idPatient}")]
         public IActionResult DeleteAppointment(Guid idAppointment, Guid idPatient)
         {
             if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.TrueString)
             {
                 if (loginViewModel.Id == patientService.GetPatientPersonId(idPatient))
                 {
+                    var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+                    var config = builder.Build();
+
+                    appointmentService.sendEmail(idAppointment,config);
                     appointmentService.DeleteAppointment(idAppointment);
+
                     return RedirectToAction("Appointments", "Patient", new { idPatient = idPatient });
                 }
                 else

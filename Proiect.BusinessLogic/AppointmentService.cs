@@ -6,13 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
+using System.Net;
 
 namespace Proiect.BusinessLogic
 {
     public class AppointmentService : BaseService
     {
-        public AppointmentService(UnitOfWork unitOfWork) : base(unitOfWork)
+        private PatientService patientService;
+        public AppointmentService(UnitOfWork unitOfWork,PatientService patientService) : base(unitOfWork)
         {
+            this.patientService = patientService;
         }
 
         public IEnumerable<Appointment> GetAppointmentsByMedicId(Guid idMedic)
@@ -180,6 +185,43 @@ namespace Proiect.BusinessLogic
         {
             unitOfWork.Appointments.Update(appointment);
             unitOfWork.SaveChanges();
+        }
+
+        public void sendEmail(Guid idAppointment,IConfigurationRoot config)
+        {
+            var emailDetails =  patientService.getPatientEmailByAppointment(idAppointment);
+
+            var message = new MailMessage();
+            message.From = new MailAddress(config["Username"]);
+            message.To.Add((string)(emailDetails?.GetType().GetProperty("Email").GetValue(emailDetails)));
+            message.Subject = "Programarea a fost anulată!";
+            message.Body = "Dorim să vă informăm că programarea din data de "
+                + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                + " la medicul " + emailDetails?.GetType().GetProperty("Medic").GetValue(emailDetails)
+                + " a fost anulată!";
+
+            var smtp = new SmtpClient
+            {
+                Host = config["Host"],
+                Port = int.Parse(config["Port"]),
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(config["Username"], config["Password"])
+            };
+
+            smtp.Send(message);
+
+            message.To.RemoveAt(0);
+            message.To.Add((string)(emailDetails?.GetType().GetProperty("MedicEmail").GetValue(emailDetails)));
+            message.Subject = "Programarea a fost anulată!";
+            message.Body = "Dorim să vă informăm că programarea din data de "
+                + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                + " a pacientului " + emailDetails?.GetType().GetProperty("Patient").GetValue(emailDetails)
+                + " a fost anulată!";
+
+            smtp.Send(message);
+            smtp.Dispose();
         }
     }
 }

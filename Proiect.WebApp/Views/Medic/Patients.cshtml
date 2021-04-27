@@ -4,37 +4,71 @@
     ViewData["Title"] = "Pacienți";
 }
 
-<partial name="_MedicPartial" model="Model.Medic" />
+<partial name="_MedicPartial" model="Model.Medic.Id" />
 
 
-@foreach (var appointment in Model.Appointments)
+@if (Model.Appointments.Any())
 {
+    @foreach (var appointment in Model.Appointments)
+    {
 
-    <div id="patientsBody">
+        <div id="patientsBody">
 
-    </div>
+        </div>
 
-    <input type="hidden" id="idMedic" value="@appointment.IdMedic" />
-    <partial name="_PacientProfileModal" model="appointment.Patient" />
+        <input type="hidden" id="idMedicInput" value="@appointment.IdMedic" />
+        var id = $"exampleModal" + appointment.IdPatient;
+        <div class="modal fade" id="@id" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="card-body">
+                                <h5 class="card-title">@appointment.Patient.Person.FirstName @appointment.Patient.Person.LastName</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Data nașterii: @appointment.Patient.Person.BirthDay</li>
+                                <li class="list-group-item">Telefon: @appointment.Patient.Person.PhoneNumber</li>
+                                <li class="list-group-item">Email: @appointment.Patient.Person.Email</li>
+                                <li class="list-group-item">Sex: @appointment.Patient.Person.Sex</li>
+                                <li class="list-group-item">Adresă: @appointment.Patient.Address</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    }
+
+    <script id="patients-template" type="text/x-handlebars-template">
+        <div class="card">
+            <div class="card-header">
+                {{patientFirstName}} {{patientLastName}}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{appointmentDate}}</h5>
+                <p class="card-text">{{details}}</p>
+                <p class="card-text">{{type}}</p>
+                <button data-id="exampleModal{{idPatient}}" type="button" class="btn btn-outline-success modalButton">
+                    Vizualizare profil pacient
+                </button>
+                <a href="/Medic/MedicalHistory/{{idPatient}}" class="btn btn-outline-info">Istoric medical pacient</a>
+            </div>
+        </div>
+    </script>
 }
-
-<script id="patients-template" type="text/x-handlebars-template">
-    <div class="card">
-        <div class="card-header">
-            {{patient.person.firstName}} {{patient.person.lastName}}
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">{{appointmentDate}}</h5>
-            <p class="card-text">{{details}}</p>
-            <p class="card-text">{{type}}</p>
-            <button data-id="exampleModal{{idPatient}}" type="button" class="btn btn-outline-success modalButton">
-                Vizualizare profil pacient
-            </button>
-            <a href="/Medic/MedicalHistory/{{idPatient}}" class="btn btn-outline-info">Istoric medical pacient</a>
-        </div>
+else
+{
+    <div class="mt-3 p-2 alert-info text-center">
+        <h2>Nu aveți niciun pacient</h2>
     </div>
-</script>
+}
 
 
 

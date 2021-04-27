@@ -21,7 +21,7 @@ namespace Proiect.DataAccess.EntityFramework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DIORDACHE; Database=ProiectDB;Trusted_Connection=true; Connection Timeout=3600");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-TEE8R6V\\SQLEXPRESS; Database=ProiectDB;Trusted_Connection=true; Connection Timeout=3600");
             optionsBuilder.EnableSensitiveDataLogging();
         }
 

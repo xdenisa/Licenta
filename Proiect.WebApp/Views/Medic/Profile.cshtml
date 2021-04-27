@@ -4,15 +4,16 @@
     ViewData["Title"] = "Profil";
 }
 
-<partial name="_MedicPartial" model="@Model.Medic" />
+<partial name="_MedicPartial" model="@Model.Medic.Id" />
 
 <div class="card shadow float-left profile">
     <div class="card-body text-center">
-        <h5 class="card-title">@Model.Medic.Person.FirstName @Model.Medic.Person.LastName</h5>
+        <h5 class="card-title">@Model.Medic.FirstName @Model.Medic.LastName</h5>
         <div class="row">
             <div class="text-center ml-xl-5">
                 <form asp-action="ProfilePut" asp-controller="Medic" enctype="multipart/form-data" role="form">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Password" type="hidden" />
                     <div class="container mb-3">
                         <a class="btn btn-info" asp-action="ChangePassword" asp-controller="Medic" asp-route-idMedic="@Model.Medic.Id">Schimbă parola</a>
                     </div>
@@ -21,37 +22,36 @@
                         <label asp-for="Image" class="custom-file-label" for="customFile">Poză profil</label>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Medic.Person.Email" class="control-label"></label>
-                        <input asp-for="Medic.Person.Email" class="form-control" />
-                        <span asp-validation-for="Medic.Person.Email" class="text-danger"></span>
-                    </div>
-                    <input asp-for="Medic.Person.Password" type="hidden" />
-                    <div class="form-group">
-                        <label asp-for="Medic.Person.FirstName" class="control-label">Prenume</label>
-                        <input asp-for="Medic.Person.FirstName" class="form-control" />
-                        <span asp-validation-for="Medic.Person.FirstName" class="text-danger"></span>
+                        <label asp-for="Medic.Email" class="control-label"></label>
+                        <input asp-for="Medic.Email" class="form-control" />
+                        <span asp-validation-for="Medic.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Medic.Person.LastName" class="control-label">Nume</label>
-                        <input asp-for="Medic.Person.LastName" class="form-control" />
-                        <span asp-validation-for="Medic.Person.LastName" class="text-danger"></span>
+                        <label asp-for="Medic.FirstName" class="control-label">Prenume</label>
+                        <input asp-for="Medic.FirstName" class="form-control" />
+                        <span asp-validation-for="Medic.FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Medic.Person.BirthDay" class="control-label">Data nașterii</label>
-                        <input asp-for="Medic.Person.BirthDay" class="form-control" type="date" />
-                        <span asp-validation-for="Medic.Person.BirthDay" class="text-danger"></span>
+                        <label asp-for="Medic.LastName" class="control-label">Nume</label>
+                        <input asp-for="Medic.LastName" class="form-control" />
+                        <span asp-validation-for="Medic.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Medic.Person.Sex" class="control-label">Sex</label>
-                        <select asp-for="Medic.Person.Sex" class="form-control">
+                        <label asp-for="Medic.BirthDay" class="control-label">Data nașterii</label>
+                        <input asp-for="Medic.BirthDay" class="form-control" type="date" />
+                        <span asp-validation-for="Medic.BirthDay" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Medic.Sex" class="control-label">Sex</label>
+                        <select asp-for="Medic.Sex" class="form-control">
                             <option value="Masculin">Masculin</option>
                             <option value="Feminin">Feminin</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Medic.Person.PhoneNumber" class="control-label">Telefon</label>
-                        <input asp-for="Medic.Person.PhoneNumber" class="form-control" />
-                        <span asp-validation-for="Medic.Person.PhoneNumber" class="text-danger"></span>
+                        <label asp-for="Medic.PhoneNumber" class="control-label">Telefon</label>
+                        <input asp-for="Medic.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Medic.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Medic.IdentificationCode" class="control-label">Cod Identificare</label>
@@ -89,8 +89,9 @@
                     </div>
                     <input asp-for="Medic.Id" type="hidden" id="idMedicInput" />
                     <input asp-for="Medic.IdPerson" type="hidden" />
-                    <input asp-for="Medic.Person.Id" type="hidden" />
+                    <input asp-for="Medic.IdPerson" type="hidden" />
                     <input asp-for="Medic.IsApproved" type="hidden" />
+                    <input asp-for="IsAdmin" type="hidden" />
                     @if (Model.Medic.Image != null)
                     {
                         <input asp-for="Medic.IdImage" type="hidden" />
@@ -113,3 +114,4 @@
 </div>
 
 <script src="~/lib/js/Delete.js"></script>
+<script src="~/lib/js/DocumentLabel.js"></script>

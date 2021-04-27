@@ -1,4 +1,4 @@
-﻿@model Patient
+﻿@model PatientViewModel
 
 <div class="container mt-4">
     <div class="card text-center">
@@ -16,7 +16,7 @@
     <div class="card text-center">
         <div class="card-body">
             <h5 class="card-title">Contactare pacient prin email</h5>
-            <email email="@Model.Person.Email" body="Email pacient"></email>
+            <email email="@Model.Email" body="Email pacient"></email>
         </div>
     </div>
 </div>

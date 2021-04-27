@@ -1,5 +1,5 @@
 ﻿@inject Proiect.WebApp.Models.Account.LoginViewModel UserLogIn
-@model Medic
+@model MedicViewModel
 
 @{
     ViewData["Title"] = "Meniu";
@@ -7,7 +7,7 @@
 
 @if (UserLogIn.IsLogedIn)
 {
-    <partial name="_MedicPartial" model="@Model" />
+    <partial name="_MedicPartial" model="@Model.Id" />
 
     <div class="card text-center">
         <div class="card-body">

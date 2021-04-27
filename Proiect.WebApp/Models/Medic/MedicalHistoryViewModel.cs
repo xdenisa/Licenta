@@ -11,7 +11,7 @@ namespace Proiect.WebApp.Models
 {
     public class MedicalHistoryViewModel : IValidatableObject
     {
-        public Patient Patient { get; set; }
+        public PatientViewModel Patient { get; set; }
         public IEnumerable<TreatmentMedicine> Medicines { get; set; }
         public IEnumerable<Result> Results { get; set; }
         public IFormFile Document { get; set; }

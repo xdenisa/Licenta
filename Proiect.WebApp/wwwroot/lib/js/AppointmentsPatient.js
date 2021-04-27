@@ -3,7 +3,7 @@
         var source = document.getElementById("appointmentsPacient-template").innerHTML;
         var template = Handlebars.compile(source);
         let numberAppointments = 0;
-        let idPatient = document.getElementById("idPatient").value;
+        let idPatient = document.getElementById("idPatientInput").value;
         let canGet = true;
         return () => {
             if (canGet) {

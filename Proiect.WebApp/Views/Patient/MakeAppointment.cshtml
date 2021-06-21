@@ -2,7 +2,7 @@
 
 <partial name="_PacientPartial" model="@Model.Patient.Id" />
 
-<div class="row">
+<div class="row justify-content-md-center">
     <div class="col-md-4 p-4">
         <h3>Programare medic @Model.Medic.Person.FirstName @Model.Medic.Person.LastName</h3>
         <form asp-action="MakeAppointment" asp-controller="Patient" method="post">
@@ -10,7 +10,6 @@
             <div class="form-group">
                 <input asp-for="Patient.Id" type="hidden" />
             </div>
-            <input asp-for="IsEdit" type="hidden" />
             <div class="form-group">
                 <input asp-for="Medic.Id" type="hidden" />
             </div>
@@ -28,7 +27,8 @@
             <div class="form-group">
                 <label asp-for="Appointment.AppointmentDate" class="control-label">Dată și oră programare</label>
                 <input asp-for="Appointment.AppointmentDate" class="form-control" />
-                <span asp-validation-for="Appointment.AppointmentDate" class="text-danger"></span>
+                @if (!Model.isValid)
+                {<span asp-validation-for="Appointment.AppointmentDate" class="text-danger">Nu puteți face programare la acea dată!</span>}
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.Type" class="control-label">Locație</label>

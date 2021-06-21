@@ -1,0 +1,38 @@
+﻿@model Medic
+
+@{ var idMedic = $"exampleModal" + Model.Id;
+    <div class="modal fade" id="@idMedic" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.Person.FirstName @Model.Person.LastName</h5>
+                            <p class="card-text">@Model.Description</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Data nașterii: @Model.Person.BirthDay</li>
+                            <li class="list-group-item">Telefon: @Model.Person.PhoneNumber</li>
+                            <li class="list-group-item">Email: @Model.Person.Email</li>
+                            <li class="list-group-item">Sex: @Model.Person.Sex</li>
+                            <li class="list-group-item">Cod Identificare: @Model.IdentificationCode</li>
+                            <li class="list-group-item">Colegiul Medicilor: @Model.MedicalCollegeYear</li>
+                            @if (Model.Specialization != null)
+                            {
+                                <li class="list-group-item">Specializare: @Model.Specialization.Name</li>
+                            }
+                            <li class="list-group-item">Spital: @Model.Hospital</li>
+                            <li class="list-group-item">Competente: @Model.Abilities</li>
+                            <li class="list-group-item">Studii: @Model.Education</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

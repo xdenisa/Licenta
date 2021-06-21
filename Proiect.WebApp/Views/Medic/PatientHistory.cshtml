@@ -1,5 +1,11 @@
 ﻿@model MedicalHistoryViewModel
 
+@{
+    ViewData["Title"] = "Istoric medical";
+}
+
+<partial name="_MedicPartial" model="Model.IdMedic" />
+
 <div class="container m-3">
     <form asp-action="AddPortfolio" asp-controller="Medic" enctype="multipart/form-data" role="form" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -28,8 +34,13 @@
         <div class="container mt-3">
             <ul class="list-group">
                 <li class="list-group-item">
-                    Document adăugat la data: @result.DateOfIssue <hr />
-                    <a class="badge badge-dark" href="#">Vizualizare</a> <hr />
+                    Document adăugat la data: @result.DateOfIssue
+                    <div class="float-right">
+                        <a class="badge badge-dark" asp-action="ReadDocument" asp-controller="Medic"
+                           asp-route-idDocument="@result.Id" target="_blank">Vizualizare</a>
+                    </div>
+                    <hr />
+                    <p>Observații: @result.Observations</p>
                 </li>
             </ul>
         </div>

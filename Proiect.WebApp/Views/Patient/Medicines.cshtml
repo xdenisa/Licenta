@@ -21,8 +21,12 @@
                         <h5 class="card-title">@medicine.Medicine.Name</h5>
                         <p class="card-text">@medicine.Medicine.AdministrationMethod</p>
                         <p class="card-text">@medicine.Treatment.Observations</p>
-                        <button onclick="deleteMedicine()" id="btnDeleteMedicine" data-id="@medicine.Treatment.Id" 
-                                data-patient="@Model.Patient.Id" class="btn btn-outline-danger">Întrerupe medicația</button>
+
+                        <button onclick="deleteMedicine(`@medicine.Treatment.Id`)" id="btnDeleteMedicine"
+                                data-patient="@Model.Patient.Id" class="btn btn-outline-danger">
+                            Întrerupe medicația
+                        </button>
+
                         <a asp-action="EditMedicine" asp-controller="Patient" asp-route-idMedicine="@medicine.Medicine.Id"
                            asp-route-idPatient="@Model.Patient.Id" class="btn btn-outline-primary">Editează detaliile medicament</a>
                     </div>

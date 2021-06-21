@@ -15,12 +15,15 @@ namespace Proiect.BusinessLogic
     {
         private readonly IMapper mapper;
         private readonly ImageService imageService;
+        private readonly PortfolioService portfolioService;
         public PatientService(UnitOfWork unitOfWork,
             IMapper mapper,
-            ImageService imageService) : base(unitOfWork)
+            ImageService imageService,
+            PortfolioService portfolioService) : base(unitOfWork)
         {
             this.mapper = mapper;
             this.imageService = imageService;
+            this.portfolioService = portfolioService;
         }
 
         public Patient GetPatientByPersonId(Guid id)
@@ -41,16 +44,6 @@ namespace Proiect.BusinessLogic
                 .Include(i => i.Image)
                 .FirstOrDefault(i => i.Id == id);
         }
-
-        //public void UpdateProfilePicture(Patient patient, Image image)
-        //{
-        //    if (patient.Image != null)
-        //    {
-                
-        //    }
-        //    patient.IdImage = image.Id;
-        //    patient.Image = image;
-        //}
 
         public void ChangePassword(Guid idPatient,string newPassword)
         { 
@@ -92,12 +85,22 @@ namespace Proiect.BusinessLogic
             var patientToDelete = GetPatientById(idPatient);
             var personToDelete = patientToDelete.Person;
             var imageToDelete = patientToDelete.Image;
-            unitOfWork.Patients.Delete(patientToDelete);
+
+
+            var appointments = unitOfWork.Appointments.Get().Where(id => id.IdPatient == idPatient).ToList();
+            foreach (var appointment in appointments)
+            {
+                unitOfWork.Appointments.Delete(appointment);
+            }
+
+            portfolioService.DeletePatientPortfolio(idPatient);
             unitOfWork.Persons.Delete(personToDelete);
+            
             if (imageToDelete != null)
             {
                 unitOfWork.Images.Delete(imageToDelete);
             }
+            unitOfWork.Patients.Delete(patientToDelete);
             unitOfWork.SaveChanges();
         }
 

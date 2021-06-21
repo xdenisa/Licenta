@@ -25,7 +25,7 @@
                         <input asp-for="Patient.Email" class="form-control" />
                         <span asp-validation-for="Patient.Email" class="text-danger"></span>
                     </div>
-                        <input asp-for="Password" type="hidden" />
+                    <input asp-for="Password" type="hidden" />
                     <div class="form-group">
                         <label asp-for="Patient.FirstName" class="control-label">Prenume</label>
                         <input asp-for="Patient.FirstName" class="form-control" />
@@ -59,11 +59,12 @@
                         <span asp-validation-for="Patient.Address" class="text-danger"></span>
                     </div>
 
-                    <input asp-for="Patient.Id" type="hidden" id="idPatientInput"/>
+                    <input asp-for="Patient.Id" type="hidden" id="idPatientInput" />
                     <input asp-for="Patient.IdPerson" type="hidden" />
                     @if (Model.Patient.Image != null)
                     {
-                        <input asp-for="Patient.IdImage" type="hidden" />}
+                        <input asp-for="Patient.IdImage" type="hidden" />
+                    }
                     <div class="form-group">
                         <input type="submit" value="Salvează" class="btn btn-info" />
                     </div>

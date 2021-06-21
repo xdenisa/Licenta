@@ -1,5 +1,11 @@
 ﻿@model MedicalHistoryViewModel
 
+@{
+    ViewData["Title"] = "Istoric medical";
+}
+
+<partial name="_MedicPartial" model="Model.IdMedic" />
+
 <div class="container m-3">
     <form asp-action="AddMedicine" asp-controller="Medic" enctype="multipart/form-data" role="form" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -9,9 +15,11 @@
             </div>
             <div class="col">
                 <input asp-for="Administration" type="text" class="form-control" placeholder="Mod administrare">
+                <span class="text-danger">Introduceți metoda de administrare!</span>
             </div>
             <div class="col">
                 <input asp-for="NumberOfDays" type="text" class="form-control" placeholder="Zile de tratament">
+                <span class="text-danger">Numărul de zile de tratament trebuie să fie între 1 și 365 de zile!</span>
             </div>
             <div class="col">
                 <input asp-for="Name" type="text" class="form-control" placeholder="Denumire medicament">

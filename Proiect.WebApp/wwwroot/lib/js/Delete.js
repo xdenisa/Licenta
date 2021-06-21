@@ -86,40 +86,38 @@ function deleteAppointment() {
     }
 }
 
-function deleteMedicine() {
+function deleteMedicine(idTreatment) {
+
     let idPatient = $("#btnDeleteMedicine").data("patient");
-    let id = $("#btnDeleteMedicine").data("id");
     var okay = confirm("Sunteți sigur(ă) că doriți să întrerupeți medicația?");
     if (okay) {
         $.ajax({
             type: "DELETE",
             url: `/Patient/DeleteMedicine`,
             data: {
-                idPatient: idPatient,
-                idTreatment: id
-
+                idTreatment: idTreatment,
+                idPatient: idPatient               
             },
             success: reloadPage,
-            error: console.log
+            error: reloadPage
         });
     }
 }
 
-function deletePortfolio() {
+function deletePortfolio(idResult) {
+
     let idPatient = $("#btnDeletePortfolio").data("patient");
-    let id = $("#btnDeletePortfolio").data("id");
     var okay = confirm("Sunteți sigur(ă) că doriți să ștergeți documentul?");
     if (okay) {
         $.ajax({
             type: "DELETE",
             url: `/Patient/DeletePortfolio`,
             data: {
-                idPatient: idPatient,
-                idResult: id
-
+                idResult: idResult,
+                idPatient: idPatient
             },
             success: reloadPage,
-            error: console.log
+            error: reloadPage
         });
     }
 }

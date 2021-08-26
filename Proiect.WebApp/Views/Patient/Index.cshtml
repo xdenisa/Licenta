@@ -12,9 +12,9 @@
     <div class="controller-cards">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">Editare profil</h5>
-                <p class="card-text">Editează-ți datele de profil.</p>
-                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Profile" asp-route-idPatient="@Model.Id">Profil</a>
+                <h5 class="card-title">Vizualizează medicii</h5>
+                <p class="card-text">Caută personalul medical de care ai nevoie</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Medics" asp-route-idPatient="@Model.Id">Medici</a>
             </div>
         </div>
         <div class="card text-center">
@@ -40,9 +40,9 @@
         </div>
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">Vizualizează medicii</h5>
-                <p class="card-text">Caută personalul medical de care ai nevoie</p>
-                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Medics" asp-route-idPatient="@Model.Id">Medici</a>
+                <h5 class="card-title">Editare profil</h5>
+                <p class="card-text">Editează-ți datele de profil.</p>
+                <a class="btn btn-outline-info" asp-controller="Patient" asp-action="Profile" asp-route-idPatient="@Model.Id">Profil</a>
             </div>
         </div>
     </div>

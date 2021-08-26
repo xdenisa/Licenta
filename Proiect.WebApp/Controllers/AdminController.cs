@@ -86,7 +86,7 @@ namespace Proiect.WebApp.Controllers
                 if (loginViewModel.IsAdmin)
                 {
                     var image = new Image();
-                    if (ModelState.IsValid)
+                    if (ModelState.IsValid && model.Image!=null)
                     {
                         using (var memoryStream = new MemoryStream())
                         {
@@ -111,7 +111,13 @@ namespace Proiect.WebApp.Controllers
 
                         return View();
                     }
-                    return View(model);
+                    else
+                    {
+                        model.Medics = medicService.GetMedics();
+                        model.Patients = patientService.GetAllPatients();
+                        return View(model);
+                    }
+                    
                 }
                 else
                 {
@@ -125,7 +131,6 @@ namespace Proiect.WebApp.Controllers
 
         }
 
-        [HttpDelete]
         public IActionResult DeleteMedic(Guid idMedic)
         {
             if (loginViewModel.IsLogedIn)
@@ -146,7 +151,6 @@ namespace Proiect.WebApp.Controllers
             }
         }
 
-        [HttpDelete]
         public IActionResult DeletePatient(Guid idPatient)
         {
             if (loginViewModel.IsLogedIn)

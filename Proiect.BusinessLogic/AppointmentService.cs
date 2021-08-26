@@ -180,14 +180,6 @@ namespace Proiect.BusinessLogic
             var appointments = GetAppointmentsByPatientId(idPatient);
             var appointmentsMedic = GetAppointmentsByMedicId(idMedic).Where(i => i.IdPatient != idPatient);
 
-            //foreach (var app in appointments)
-            //{
-            //    if (app.AppointmentDate.Date == appointment.AppointmentDate.Date && app.AppointmentDate.Hour == appointment.AppointmentDate.Hour)
-            //    {
-            //        return false;
-            //    }
-            //}
-
             foreach (var app in appointmentsMedic)
             {
                 if (app.AppointmentDate.Date == appointment.AppointmentDate.Date && app.AppointmentDate.Hour == appointment.AppointmentDate.Hour)

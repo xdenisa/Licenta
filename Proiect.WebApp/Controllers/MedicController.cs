@@ -584,5 +584,48 @@ namespace Proiect.WebApp.Controllers
             FileResult fileResult = new FileContentResult(document.Document, document.MimeType);
             return fileResult;
         }
+
+
+        [HttpDelete]
+        public IActionResult DeleteMedicine(Guid idTreatment, Guid idPatient,Guid idMedic)
+        {
+            if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
+            {
+                if (loginViewModel.Id == medicService.GetMedicPersonId(idMedic))
+                {
+                    medicineService.DeleteMedicine(idTreatment);
+                    return RedirectToAction("PatientMedicine", new { idPatient = idPatient });
+                }
+                else
+                {
+                    return View("NoAccessPage");
+                }
+            }
+            else
+            {
+                return View("NoAccessPage");
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeletePortfolio(Guid idResult, Guid idPatient, Guid idMedic)
+        {
+            if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
+            {
+                if (loginViewModel.Id == medicService.GetMedicPersonId(idMedic))
+                {
+                    portfolioService.DeletePortfolio(idResult);
+                    return RedirectToAction("PatientHistory", new { idPatient = idPatient });
+                }
+                else
+                {
+                    return View("NoAccessPage");
+                }
+            }
+            else
+            {
+                return View("NoAccessPage");
+            }
+        }
     }
 }

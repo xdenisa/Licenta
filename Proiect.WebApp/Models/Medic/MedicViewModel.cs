@@ -48,8 +48,6 @@ namespace Proiect.WebApp.Models
         [Required(ErrorMessage = "Introduceți anul intrării în Colegiul Medicilor!")]
         public int? MedicalCollegeYear { get; set; }
         public Guid? IdSpecialization { get; set; }
-
-        [StringLength(100, ErrorMessage = "Introduceți spitalul la care lucrați!")]
         public string Hospital { get; set; }
         public string Abilities { get; set; }
         public string Education { get; set; }
@@ -64,10 +62,10 @@ namespace Proiect.WebApp.Models
                 yield return new ValidationResult("Trebuie să aveți cel puțin 18 ani!", new List<string> { nameof(BirthDay) });
             }
 
-            if (IdentificationCode.ToString().Length != 10)
-            {
-                yield return new ValidationResult("Codul Unic de Identificare trebuie sa aibă 10 cifre!", new List<string> { nameof(IdentificationCode) });
-            }
+            //if (IdentificationCode.ToString().Length != 10)
+            //{
+            //    yield return new ValidationResult("Codul Unic de Identificare trebuie sa aibă 10 cifre!", new List<string> { nameof(IdentificationCode) });
+            //}
 
             if (MedicalCollegeYear<DateTime.Now.Year-70 || MedicalCollegeYear>DateTime.Now.Year)
             {

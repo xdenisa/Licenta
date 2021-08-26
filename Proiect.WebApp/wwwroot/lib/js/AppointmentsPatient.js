@@ -20,7 +20,7 @@
                             let appointment = result[i];
                             appointment.appointmentDate = new Date(appointment.appointmentDate);
                             var html = template(appointment);
-                            $("#appointmentsPacientBody").append(html);
+                            $("#appointmentsPatientBody").append(html);
                             $(".modalButton").click(function () {
                                 let id = $(this).data("id");
                                 $(`#${id}`).modal();

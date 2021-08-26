@@ -24,7 +24,6 @@ namespace Proiect.WebApp.Models
         [StringLength(100, ErrorMessage = "Prenumele trebuie să aibă între 3 și 100 de caractere!",MinimumLength = 3)]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Introduceți adresa!")]
         [DisplayName("Adresă")]
         [StringLength(100, ErrorMessage = "Adresa trebuie să aibă între 5 și 50 de caractere!", MinimumLength = 3)]
         public string Address { get; set; }

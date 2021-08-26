@@ -18,13 +18,18 @@
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input type="password" asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+            @if (!Model.IsValid)
+            {
+                <div class="alert alert-danger" role="alert">
+                    Datele introduse nu sunt valide!
+                </div>
+            }
             <div class="form-group">
                 <input type="submit" value="Autentificare" class="btn btn-info" />
             </div>

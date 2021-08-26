@@ -29,6 +29,11 @@ namespace Proiect.WebApp.Code
                    .ForMember(i => i.Specialization, opt => opt.MapFrom(i => i.Specialization))
                    .ForMember(i => i.MedicalCollegeYear, opt => opt.MapFrom(i => i.MedicalCollegeYear))
                    .ForMember(i => i.IdentificationCode, opt => opt.MapFrom(i => i.IdentificationCode))
+                   .ForMember(i => i.Hospital, opt => opt.MapFrom(i => i.Hospital))
+                   .ForMember(i => i.Education, opt => opt.MapFrom(i => i.Education))
+                   .ForMember(i => i.Abilities, opt => opt.MapFrom(i => i.Abilities))
+                   .ForMember(i => i.Description, opt => opt.MapFrom(i => i.Description))
+
                    .ForMember(i => i.IdSpecialization, opt => opt.MapFrom(i => i.IdSpecialization));
 
 
@@ -76,6 +81,10 @@ namespace Proiect.WebApp.Code
                   .ForPath(i => i.Medic.Image, opt => opt.MapFrom(i => i.Image))
                   .ForPath(i => i.Medic.MedicalCollegeYear, opt => opt.MapFrom(i => i.MedicalCollegeYear))
                    .ForPath(i => i.Medic.IdentificationCode, opt => opt.MapFrom(i => i.IdentificationCode))
+                   .ForPath(i => i.Medic.Hospital, opt => opt.MapFrom(i => i.Hospital))
+                    .ForPath(i => i.Medic.Abilities, opt => opt.MapFrom(i => i.Abilities))
+                     .ForPath(i => i.Medic.Education, opt => opt.MapFrom(i => i.Education))
+                      .ForPath(i => i.Medic.Description, opt => opt.MapFrom(i => i.Description))
                 .ForMember(i => i.Password, opt => opt.MapFrom(i => i.Person.Password))
                  .ForMember(i => i.IsAdmin, opt => opt.MapFrom(i => i.Person.IsAdmin))
                  .ForPath(i => i.Medic.IsApproved, opt => opt.MapFrom(i => i.IsApproved))
@@ -118,6 +127,10 @@ namespace Proiect.WebApp.Code
                   .ForMember(i => i.IsApproved, opt => opt.MapFrom(i => i.Medic.IsApproved))
                   .ForPath(i => i.Person.IsAdmin, opt => opt.MapFrom(i => i.IsAdmin))
                   .ForMember(i => i.Image, opt => opt.MapFrom(i => i.Medic.Image))
+                  .ForMember(i => i.Hospital, opt => opt.MapFrom(i => i.Medic.Hospital))
+                   .ForMember(i => i.Education, opt => opt.MapFrom(i => i.Medic.Education))
+                    .ForMember(i => i.Abilities, opt => opt.MapFrom(i => i.Medic.Abilities))
+                   .ForMember(i => i.Description, opt => opt.MapFrom(i => i.Medic.Description))
                   .ForMember(i => i.IdSpecialization, opt => opt.MapFrom(i => i.Medic.IdSpecialization))
                   .ForMember(i => i.Specialization, opt => opt.MapFrom(i => i.Medic.Specialization))
                   .ForAllOtherMembers(op => op.Ignore());

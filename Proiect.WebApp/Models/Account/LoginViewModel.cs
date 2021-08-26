@@ -26,10 +26,11 @@ namespace Proiect.WebApp.Models.Account
         public bool IsLogedIn { get; set; }
         public string Id { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsValid { get; set; }
 
         public LoginViewModel()
-       {
-            
-       }
+        {
+           
+        }
     }
 }

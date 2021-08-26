@@ -38,6 +38,11 @@
                     <div class="float-right">
                         <a class="badge badge-dark" asp-action="ReadDocument" asp-controller="Medic"
                            asp-route-idDocument="@result.Id" target="_blank">Vizualizare</a>
+
+                        <button onclick="deletePortfolioFromPatient(`@result.Id`)" id="btnDeletePortfolio" data-patient="@Model.Patient.Id"
+                                data-medic="@Model.IdMedic" class="badge badge-danger">
+                            Ștergere
+                        </button>
                     </div>
                     <hr />
                     <p>Observații: @result.Observations</p>
@@ -49,3 +54,4 @@
 
 
 <script src="~/lib/js/DocumentLabel.js"></script>
+<script src="~/lib/js/Delete.js"></script>

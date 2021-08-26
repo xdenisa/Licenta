@@ -18,37 +18,6 @@ function deleteProfile() {
     }
 }
 
-function deletePatient() {
-    let idPatient = $("#btnDeletePatient").data("id");
-    var okay = confirm("Sunteți sigur(ă) că doriți ștergerea contului?");
-    if (okay) {
-        $.ajax({
-            type: "DELETE",
-            url: `/Admin/DeletePatient`,
-            data: {
-                idPatient: idPatient
-            },
-            success: reloadPage,
-            error: console.log
-        });
-    }
-}
-
-function deleteMedic() {
-    let idMedic = $("#btnDeleteMedic").data("id");
-    var okay = confirm("Sunteți sigur(ă) că doriți ștergerea contului?");
-    if (okay) {
-        $.ajax({
-            type: "DELETE",
-            url: `/Admin/DeleteMedic`,
-            data: {
-                idMedic: idMedic
-            },
-            success: reloadPage,
-            error: console.log
-        });
-    }
-}
 
 function deletePatientProfile() {
     let idPatient = document.getElementById("idPatientInput").value;
@@ -115,6 +84,49 @@ function deletePortfolio(idResult) {
             data: {
                 idResult: idResult,
                 idPatient: idPatient
+            },
+            success: reloadPage,
+            error: reloadPage
+        });
+    }
+}
+
+
+
+function deleteMedicineFromPatient(idTreatment) {
+
+    let idPatient = $("#btnDeleteMedicine").data("patient");
+    let idMedic = $("#btnDeleteMedicine").data("medic");
+    var okay = confirm("Sunteți sigur(ă) că doriți ștergerea medicației?");
+    if (okay) {
+        $.ajax({
+            type: "DELETE",
+            url: `/Medic/DeleteMedicine`,
+            data: {
+                idTreatment: idTreatment,
+                idPatient: idPatient,
+                idMedic:idMedic
+            },
+            success: reloadPage,
+            error: reloadPage
+        });
+    }
+}
+
+
+function deletePortfolioFromPatient(idResult) {
+
+    let idPatient = $("#btnDeletePortfolio").data("patient");
+    let idMedic = $("#btnDeletePortfolio").data("medic");
+    var okay = confirm("Sunteți sigur(ă) că doriți să ștergeți documentul?");
+    if (okay) {
+        $.ajax({
+            type: "DELETE",
+            url: `/Medic/DeletePortfolio`,
+            data: {
+                idResult: idResult,
+                idPatient: idPatient,
+                idMedic: idMedic
             },
             success: reloadPage,
             error: reloadPage

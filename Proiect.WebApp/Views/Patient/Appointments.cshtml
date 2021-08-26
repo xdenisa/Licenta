@@ -12,7 +12,7 @@
     {
         var id = $"exampleModal" + appointment.IdMedic;
 
-        <div id="appointmentsPacientBody">
+        <div id="appointmentsPatientBody">
 
         </div>
 
@@ -23,7 +23,7 @@
         <script id="appointmentsPacient-template" type="text/x-handlebars-template">
             <div class="card">
                 <div class="card-header">
-                    {{medicFirstName}} {{medicLastName}}
+                    DR. {{medicFirstName}} {{medicLastName}}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{appointmentDate}}</h5>

@@ -4,34 +4,72 @@
     ViewData["Title"] = "Programări";
 }
 
-<partial name="_MedicPartial" model="Model.Medic" />
+<partial name="_MedicPartial" model="Model.Medic.Id" />
 
 
-@foreach (var appointment in Model.Appointments)
+@if (Model.Appointments.Any())
 {
-    <div id="appointmentsBody">
+    @foreach (var appointment in Model.Appointments)
+    {
+        <div id="appointmentsBody">
 
+        </div>
+        <input type="hidden" id="idMedicAppointments" value="@appointment.IdMedic" />
+
+
+        var id = $"exampleModal" + appointment.IdPatient;
+        <div class="modal fade" id="@id" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <div class="card-body">
+                                <h5 class="card-title">@appointment.Patient.Person.FirstName @appointment.Patient.Person.LastName</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Data nașterii: @appointment.Patient.Person.BirthDay</li>
+                                <li class="list-group-item">Telefon: @appointment.Patient.Person.PhoneNumber</li>
+                                <li class="list-group-item">Email: @appointment.Patient.Person.Email</li>
+                                <li class="list-group-item">Sex: @appointment.Patient.Person.Sex</li>
+                                <li class="list-group-item">Adresă: @appointment.Patient.Address</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <script id="appointments-template" type="text/x-handlebars-template">
+        <div class="card">
+            <div class="card-header">
+                {{patientFirstName}} {{patientLastName}}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{appointmentDate}}</h5>
+                <p class="card-text">{{details}}</p>
+                <p class="card-text">{{type}}</p>
+                <button data-id="exampleModal{{idPatient}}" type="button" class="btn btn-outline-success modalButton">
+                    Vizualizare profil pacient
+                </button>
+                <a href="/Medic/DeleteAppointment/{{idAppointment}}/{{idMedic}}" class="btn btn-outline-danger">Refuză programarea</a>
+            </div>
+        </div>
+    </script>
+}
+else
+{
+    <div class="mt-3 p-2 alert-info text-center">
+        <h2>Nu aveți nicio programre!</h2>
     </div>
-    <input type="hidden" id="idMedicAppointments" value="@appointment.IdMedic" />
-    <partial name="_PacientProfileModal" model="appointment.Patient" />
 }
 
-<script id="appointments-template" type="text/x-handlebars-template">
-    <div class="card">
-        <div class="card-header">
-            {{patient.person.firstName}} {{patient.person.lastName}}
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">{{appointmentDate}}</h5>
-            <p class="card-text">{{details}}</p>
-            <p class="card-text">{{type}}</p>
-            <button data-id="exampleModal{{idPatient}}" type="button" class="btn btn-outline-success modalButton">
-                Vizualizare profil pacient
-            </button>
-            <button onclick="deleteAppointment()" id="btnDeleteAppointment" data-id="{{id}}" data-medic="{{idMedic}}" class="btn btn-outline-danger">Refuză programarea</button>
-        </div>
-    </div>
-</script>
 
-<script src="/lib/js/Appointments.js"></script>
+<script src="~/lib/js/Appointments.js"></script>
 <script src="~/lib/js/Delete.js"></script>

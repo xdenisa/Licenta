@@ -1,26 +1,17 @@
 ﻿@model Medic
 
-<div class="card">
+<div class="card" style="width:18rem;">
     <div class="card-header">
         @Model.Person.FirstName @Model.Person.LastName
     </div>
-    <div class="container">
-        <div class="float-left">
-            <div class="card-body">
-                @if (Model.Specialization != null)
-                { <p class="card-text">@Model.Specialization.Name</p>}
-                <p class="card-text">@Model.Person.Email</p>
-                <p class="card-text">@Model.Person.PhoneNumber</p>
-                @if (Model.IsApproved != bool.TrueString)
-                {<a asp-action="ApproveMedic" asp-controller="Admin" asp-route-idMedic="@Model.Id" class="btn btn-success">Aprobă</a>}
-                <button class="btn btn-danger" onclick="deleteMedic()" id="btnDeleteMedic" data-id="@Model.Id">Șterge medic</button>
-            </div>
-        </div>
-        <div class="float-right">
-            @if (Model.Image != null)
-            {<img class="image-card" src="data:@Model.Image.MimeType;base64,@(Convert.ToBase64String(Model.Image._Image))" alt="Image" />}
-        </div>
+    <div class="card-body">
+        @if (Model.Specialization != null)
+        {<p class="card-text">@Model.Specialization.Name</p>}
+        <p class="card-text">@Model.Person.Email</p>
+        <p class="card-text">@Model.Person.PhoneNumber</p>
+        @if (Model.IsApproved != bool.TrueString)
+        {<a asp-action="ApproveMedic" asp-controller="Admin" asp-route-idMedic="@Model.Id" class="btn btn-success">Aprobă</a>}
+        <a asp-action="DeleteMedic" asp-controller="Admin" asp-route-idMedic="@Model.Id"
+           class="btn btn-danger">Șterge medic</a>
     </div>
 </div>
-
-<script src="~/lib/js/Delete.js"></script>

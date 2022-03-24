@@ -14,6 +14,29 @@ namespace Proiect.WebApp.Code
     {
         public ProfileMapper()
         {
+            CreateMap<Medic, MedicViewModel>()
+                .ForMember(i => i.Id, opt => opt.MapFrom(i => i.Id))
+                .ForMember(i => i.IdPerson, opt => opt.MapFrom(i => i.IdPerson))
+                .ForMember(i => i.IdImage, opt => opt.MapFrom(i => i.IdImage))
+                .ForMember(i => i.LastName, opt => opt.MapFrom(i => i.Person.LastName))
+                .ForMember(i => i.FirstName, opt => opt.MapFrom(i => i.Person.FirstName))
+                 .ForMember(i => i.Email, opt => opt.MapFrom(i => i.Person.Email))
+                   .ForMember(i => i.BirthDay, opt => opt.MapFrom(i => i.Person.BirthDay))
+                  .ForMember(i => i.Sex, opt => opt.MapFrom(i => i.Person.Sex))
+                  .ForMember(i => i.PhoneNumber, opt => opt.MapFrom(i => i.Person.PhoneNumber))
+                   .ForMember(i => i.Image, opt => opt.MapFrom(i => i.Image))
+                    .ForPath(i => i.Image._Image, opt => opt.MapFrom(i => i.Image._Image))
+                   .ForMember(i => i.Specialization, opt => opt.MapFrom(i => i.Specialization))
+                   .ForMember(i => i.MedicalCollegeYear, opt => opt.MapFrom(i => i.MedicalCollegeYear))
+                   .ForMember(i => i.IdentificationCode, opt => opt.MapFrom(i => i.IdentificationCode))
+                   .ForMember(i => i.Hospital, opt => opt.MapFrom(i => i.Hospital))
+                   .ForMember(i => i.Education, opt => opt.MapFrom(i => i.Education))
+                   .ForMember(i => i.Abilities, opt => opt.MapFrom(i => i.Abilities))
+                   .ForMember(i => i.Description, opt => opt.MapFrom(i => i.Description))
+
+                   .ForMember(i => i.IdSpecialization, opt => opt.MapFrom(i => i.IdSpecialization));
+
+
             CreateMap<Patient, PatientViewModel>()
                 .ForMember(i => i.Id, opt => opt.MapFrom(i => i.Id))
                 .ForMember(i => i.IdPerson, opt => opt.MapFrom(i => i.IdPerson))
@@ -26,6 +49,7 @@ namespace Proiect.WebApp.Code
                   .ForMember(i => i.PhoneNumber, opt => opt.MapFrom(i => i.Person.PhoneNumber))
                    .ForMember(i => i.Address, opt => opt.MapFrom(i => i.Address))
                    .ForMember(i => i.Image, opt => opt.MapFrom(i => i.Image))
+                   .ForPath(i => i.Image._Image, opt => opt.MapFrom(i => i.Image._Image))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
             CreateMap<Patient, PatientProfileViewModel>()
@@ -43,7 +67,31 @@ namespace Proiect.WebApp.Code
                  .ForMember(i => i.Password, opt => opt.MapFrom(i => i.Person.Password))
                   .ForMember(i => i.IsAdmin, opt => opt.MapFrom(i => i.Person.IsAdmin))
                   .ForMember(i => i.Image, opt => opt.Ignore());
-            
+
+            CreateMap<Medic, MedicProfileViewModel>()
+               .ForPath(i => i.Medic.Id, opt => opt.MapFrom(i => i.Id))
+               .ForPath(i => i.Medic.IdPerson, opt => opt.MapFrom(i => i.IdPerson))
+               .ForPath(i => i.Medic.IdImage, opt => opt.MapFrom(i => i.IdImage))
+               .ForPath(i => i.Medic.LastName, opt => opt.MapFrom(i => i.Person.LastName))
+               .ForPath(i => i.Medic.FirstName, opt => opt.MapFrom(i => i.Person.FirstName))
+                .ForPath(i => i.Medic.Email, opt => opt.MapFrom(i => i.Person.Email))
+                  .ForPath(i => i.Medic.BirthDay, opt => opt.MapFrom(i => i.Person.BirthDay))
+                 .ForPath(i => i.Medic.Sex, opt => opt.MapFrom(i => i.Person.Sex))
+                 .ForPath(i => i.Medic.PhoneNumber, opt => opt.MapFrom(i => i.Person.PhoneNumber))
+                  .ForPath(i => i.Medic.Image, opt => opt.MapFrom(i => i.Image))
+                  .ForPath(i => i.Medic.MedicalCollegeYear, opt => opt.MapFrom(i => i.MedicalCollegeYear))
+                   .ForPath(i => i.Medic.IdentificationCode, opt => opt.MapFrom(i => i.IdentificationCode))
+                   .ForPath(i => i.Medic.Hospital, opt => opt.MapFrom(i => i.Hospital))
+                    .ForPath(i => i.Medic.Abilities, opt => opt.MapFrom(i => i.Abilities))
+                     .ForPath(i => i.Medic.Education, opt => opt.MapFrom(i => i.Education))
+                      .ForPath(i => i.Medic.Description, opt => opt.MapFrom(i => i.Description))
+                .ForMember(i => i.Password, opt => opt.MapFrom(i => i.Person.Password))
+                 .ForMember(i => i.IsAdmin, opt => opt.MapFrom(i => i.Person.IsAdmin))
+                 .ForPath(i => i.Medic.IsApproved, opt => opt.MapFrom(i => i.IsApproved))
+                 .ForPath(i => i.Medic.IdSpecialization, opt => opt.MapFrom(i => i.IdSpecialization))
+                 .ForPath(i => i.Medic.Specialization, opt => opt.MapFrom(i => i.Specialization))
+                 .ForMember(i => i.Image, opt => opt.Ignore());
+
 
             CreateMap<PatientProfileViewModel, Patient>()
                 .ForMember(i => i.Id, opt => opt.MapFrom(i => i.Patient.Id))
@@ -60,6 +108,31 @@ namespace Proiect.WebApp.Code
                   .ForPath(i => i.Person.IsAdmin, opt => opt.MapFrom(i => i.IsAdmin))
                   .ForMember(i => i.Address, opt => opt.MapFrom(i => i.Patient.Address))
                   .ForMember(i => i.Image, opt => opt.MapFrom(i => i.Patient.Image))
+                  .ForAllOtherMembers(op => op.Ignore());
+
+            CreateMap<MedicProfileViewModel, Medic>()
+                .ForMember(i => i.Id, opt => opt.MapFrom(i => i.Medic.Id))
+                .ForMember(i => i.IdPerson, opt => opt.MapFrom(i => i.Medic.IdPerson))
+                .ForMember(i => i.IdImage, opt => opt.MapFrom(i => i.Medic.IdImage))
+                .ForPath(i => i.Person.LastName, opt => opt.MapFrom(i => i.Medic.LastName))
+                .ForPath(i => i.Person.Id, opt => opt.MapFrom(i => i.Medic.IdPerson))
+                .ForPath(i => i.Person.FirstName, opt => opt.MapFrom(i => i.Medic.FirstName))
+                 .ForPath(i => i.Person.Email, opt => opt.MapFrom(i => i.Medic.Email))
+                 .ForPath(i => i.Person.Password, opt => opt.MapFrom(i => i.Password))
+                  .ForPath(i => i.Person.BirthDay, opt => opt.MapFrom(i => i.Medic.BirthDay))
+                  .ForPath(i => i.Person.Sex, opt => opt.MapFrom(i => i.Medic.Sex))
+                  .ForPath(i => i.Person.PhoneNumber, opt => opt.MapFrom(i => i.Medic.PhoneNumber))
+                  .ForMember(i => i.IdentificationCode, opt => opt.MapFrom(i => i.Medic.IdentificationCode))
+                  .ForMember(i => i.MedicalCollegeYear, opt => opt.MapFrom(i => i.Medic.MedicalCollegeYear))
+                  .ForMember(i => i.IsApproved, opt => opt.MapFrom(i => i.Medic.IsApproved))
+                  .ForPath(i => i.Person.IsAdmin, opt => opt.MapFrom(i => i.IsAdmin))
+                  .ForMember(i => i.Image, opt => opt.MapFrom(i => i.Medic.Image))
+                  .ForMember(i => i.Hospital, opt => opt.MapFrom(i => i.Medic.Hospital))
+                   .ForMember(i => i.Education, opt => opt.MapFrom(i => i.Medic.Education))
+                    .ForMember(i => i.Abilities, opt => opt.MapFrom(i => i.Medic.Abilities))
+                   .ForMember(i => i.Description, opt => opt.MapFrom(i => i.Medic.Description))
+                  .ForMember(i => i.IdSpecialization, opt => opt.MapFrom(i => i.Medic.IdSpecialization))
+                  .ForMember(i => i.Specialization, opt => opt.MapFrom(i => i.Medic.Specialization))
                   .ForAllOtherMembers(op => op.Ignore());
 
             CreateMap<Medic, Medic>()
@@ -83,6 +156,18 @@ namespace Proiect.WebApp.Code
             CreateMap<Specialization, SelectListItem>()
                 .ForMember(t => t.Text, opt => opt.MapFrom(n => n.Name))
                 .ForMember(v => v.Value, opt => opt.MapFrom(i => i.Id));
+
+            CreateMap<Appointment, AppointmentsViewModel>()
+                 .ForMember(m => m.MedicFirstName, opt => opt.MapFrom(n => n.Medic.Person.FirstName))
+                  .ForMember(m => m.MedicLastName, opt => opt.MapFrom(n => n.Medic.Person.LastName))
+                  .ForMember(m => m.PatientFirstName, opt => opt.MapFrom(n => n.Patient.Person.FirstName))
+                  .ForMember(m => m.PatientLastName, opt => opt.MapFrom(n => n.Patient.Person.LastName))
+                  .ForMember(m => m.AppointmentDate, opt => opt.MapFrom(n => n.AppointmentDate))
+                  .ForMember(m => m.Details, opt => opt.MapFrom(n => n.Details))
+                  .ForMember(m => m.Type, opt => opt.MapFrom(n => n.Type))
+                  .ForMember(m => m.IdAppointment, opt => opt.MapFrom(n => n.Id))
+                  .ForMember(m => m.IdMedic, opt => opt.MapFrom(n => n.IdMedic))
+                  .ForMember(m => m.IdPatient, opt => opt.MapFrom(n => n.IdPatient));
         }
     }
 }

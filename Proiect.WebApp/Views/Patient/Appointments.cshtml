@@ -5,52 +5,55 @@
 }
 
 <partial name="_PacientPartial" model="@Model.Patient.Id" />
-@foreach (var appointment in Model.Appointments)
+
+@if (Model.Appointments.Any())
 {
-    var id = $"exampleModal" + appointment.IdMedic;
+    @foreach (var appointment in Model.Appointments)
+    {
+        var id = $"exampleModal" + appointment.IdMedic;
 
-    <div id="appointmentsPacientBody">
+        <div id="appointmentsPatientBody">
 
-    </div>
+        </div>
 
-    <input type="hidden" id="idPatient" value="@appointment.IdPatient" />
+        <input type="hidden" id="idPatientInput" value="@appointment.IdPatient" />
 
-    <div class="modal fade" id="@id" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <partial name="MedicModal" model="@appointment.Medic" />
+
+        <script id="appointmentsPacient-template" type="text/x-handlebars-template">
+            <div class="card">
+                <div class="card-header">
+                    DR. {{medicFirstName}} {{medicLastName}}
                 </div>
-                <div class="modal-body">
-                    <partial name="_MedicProfileCard" model="appointment.Medic" />
+                <div class="card-body">
+                    <h5 class="card-title">{{appointmentDate}}</h5>
+                    <p class="card-text">{{details}}</p>
+                    <p class="card-text">{{type}}</p>
+
+                    <button type="button" data-id="exampleModal{{idMedic}}" class="btn btn-outline-success modalButton">
+                        Vizualizare profil medic
+                    </button>
+
+                    {{#if (isvalid appointmentDate)}}
+                    <a href="/Patient/EditAppointment/{{idAppointment}}" class="btn btn-outline-primary">Editează detaliile programării</a>
+
+                    <a href="/Patient/DeleteAppointment/{{idAppointment}}/{{idPatient}}" class="btn btn-outline-danger">Anulează programarea</a>
+                    {{/if}}
                 </div>
             </div>
-        </div>
+        </script>
+    }
+}
+else
+{
+    <div class="mt-3 p-2 alert-info text-center">
+        <h2>Nu aveți nicio programre!</h2>
     </div>
 }
 
-<script id="appointmentsPacient-template" type="text/x-handlebars-template">
-    <div class="card">
-        <div class="card-header">
-            {{medic.person.firstName}} {{medic.person.lastName}}
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">{{appointmentDate}}</h5>
-            <p class="card-text">{{details}}</p>
-            <p class="card-text">{{type}}</p>
-            <button type="button" data-id="exampleModal{{idMedic}}" class="btn btn-outline-success modalButton">
-                Vizualizare profil medic
-            </button>
-            <button onclick="deletePatientAppointment()" id="btnDeletePatientAppointment" data-id="{{id}}" data-patient="{{idPatient}}"
-                    class="btn btn-outline-danger">Anulează programarea
-            </button>
-            <a href="/Patient/EditAppointment/{{id}}" class="btn btn-outline-primary">Editează detaliile programării</a>
-        </div>
-    </div>
-</script>
+
 
 
 <script src="/lib/js/AppointmentsPatient.js"></script>
 <script src="~/lib/js/Delete.js"></script>
+<script src="~/lib/js/Helper.js"></script>

@@ -18,37 +18,6 @@ function deleteProfile() {
     }
 }
 
-function deletePatient() {
-    let idPatient = $("#btnDeletePatient").data("id");
-    var okay = confirm("Sunteți sigur(ă) că doriți ștergerea contului?");
-    if (okay) {
-        $.ajax({
-            type: "DELETE",
-            url: `/Admin/DeletePatient`,
-            data: {
-                idPatient: idPatient
-            },
-            success: reloadPage,
-            error: console.log
-        });
-    }
-}
-
-function deleteMedic() {
-    let idMedic = $("#btnDeleteMedic").data("id");
-    var okay = confirm("Sunteți sigur(ă) că doriți ștergerea contului?");
-    if (okay) {
-        $.ajax({
-            type: "DELETE",
-            url: `/Admin/DeleteMedic`,
-            data: {
-                idMedic: idMedic
-            },
-            success: reloadPage,
-            error: console.log
-        });
-    }
-}
 
 function deletePatientProfile() {
     let idPatient = document.getElementById("idPatientInput").value;
@@ -86,59 +55,81 @@ function deleteAppointment() {
     }
 }
 
-function deletePatientAppointment() {
-    let idPatient = $("#btnDeletePatientAppointment").data("patient");
-    let id = $("#btnDeletePatientAppointment").data("id");
-    var okay = confirm("Sunteți sigur(ă) că doriți să anulați programarea?");
-    if (okay) {
-        $.ajax({
-            type: "DELETE",
-            url: `/Patient/DeleteAppointment`,
-            data: {
-                idPatient: idPatient,
-                idAppointment: id
+function deleteMedicine(idTreatment) {
 
-            },
-            success: reloadPage,
-            error: console.log
-        });
-    }
-}
-
-function deleteMedicine() {
     let idPatient = $("#btnDeleteMedicine").data("patient");
-    let id = $("#btnDeleteMedicine").data("id");
     var okay = confirm("Sunteți sigur(ă) că doriți să întrerupeți medicația?");
     if (okay) {
         $.ajax({
             type: "DELETE",
             url: `/Patient/DeleteMedicine`,
             data: {
-                idPatient: idPatient,
-                idTreatment: id
-
+                idTreatment: idTreatment,
+                idPatient: idPatient               
             },
             success: reloadPage,
-            error: console.log
+            error: reloadPage
         });
     }
 }
 
-function deletePortfolio() {
+function deletePortfolio(idResult) {
+
     let idPatient = $("#btnDeletePortfolio").data("patient");
-    let id = $("#btnDeletePortfolio").data("id");
     var okay = confirm("Sunteți sigur(ă) că doriți să ștergeți documentul?");
     if (okay) {
         $.ajax({
             type: "DELETE",
             url: `/Patient/DeletePortfolio`,
             data: {
-                idPatient: idPatient,
-                idResult: id
-
+                idResult: idResult,
+                idPatient: idPatient
             },
             success: reloadPage,
-            error: console.log
+            error: reloadPage
+        });
+    }
+}
+
+
+
+function deleteMedicineFromPatient(idTreatment) {
+
+    let idPatient = $("#btnDeleteMedicine").data("patient");
+    let idMedic = $("#btnDeleteMedicine").data("medic");
+    var okay = confirm("Sunteți sigur(ă) că doriți ștergerea medicației?");
+    if (okay) {
+        $.ajax({
+            type: "DELETE",
+            url: `/Medic/DeleteMedicine`,
+            data: {
+                idTreatment: idTreatment,
+                idPatient: idPatient,
+                idMedic:idMedic
+            },
+            success: reloadPage,
+            error: reloadPage
+        });
+    }
+}
+
+
+function deletePortfolioFromPatient(idResult) {
+
+    let idPatient = $("#btnDeletePortfolio").data("patient");
+    let idMedic = $("#btnDeletePortfolio").data("medic");
+    var okay = confirm("Sunteți sigur(ă) că doriți să ștergeți documentul?");
+    if (okay) {
+        $.ajax({
+            type: "DELETE",
+            url: `/Medic/DeletePortfolio`,
+            data: {
+                idResult: idResult,
+                idPatient: idPatient,
+                idMedic: idMedic
+            },
+            success: reloadPage,
+            error: reloadPage
         });
     }
 }

@@ -15,6 +15,12 @@ namespace Proiect.BusinessLogic
         {
         }
 
+        public Result GetDocument(Guid idResult)
+        {
+            return unitOfWork.Results.Get()
+                .First(id => id.Id == idResult);            
+        }
+
         public Result InsertResult(Result result)
         {
             unitOfWork.Results.Insert(result);
@@ -52,6 +58,17 @@ namespace Proiect.BusinessLogic
             unitOfWork.Results.Delete(result);
             unitOfWork.Portfolio.Delete(portfolio);
             unitOfWork.SaveChanges();
+        }
+
+        public void DeletePatientPortfolio(Guid idPatient)
+        {
+            var portfolio = unitOfWork.Portfolio.Get()
+                .Where(p => p.IdPatient == idPatient)
+                .ToList();
+            foreach (var item in portfolio)
+            {
+                unitOfWork.Portfolio.Delete(item);
+            }
         }
     }
 }

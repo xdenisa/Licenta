@@ -3,7 +3,7 @@
         var source = document.getElementById("appointmentsPacient-template").innerHTML;
         var template = Handlebars.compile(source);
         let numberAppointments = 0;
-        let idPatient = document.getElementById("idPatient").value;
+        let idPatient = document.getElementById("idPatientInput").value;
         let canGet = true;
         return () => {
             if (canGet) {
@@ -20,7 +20,7 @@
                             let appointment = result[i];
                             appointment.appointmentDate = new Date(appointment.appointmentDate);
                             var html = template(appointment);
-                            $("#appointmentsPacientBody").append(html);
+                            $("#appointmentsPatientBody").append(html);
                             $(".modalButton").click(function () {
                                 let id = $(this).data("id");
                                 $(`#${id}`).modal();

@@ -54,7 +54,7 @@ namespace Proiect.WebApp.Models.Account
         {
             if(DateTime.Now.Year - BirthDay.Year <18)
             {
-                yield return new ValidationResult("Trebuie sa aveti cel putin 18 ani!", new List<string> { nameof(BirthDay) });
+                yield return new ValidationResult("Trebuie să aveți cel puțin 18 ani!", new List<string> { nameof(BirthDay) });
             }
             if (BirthDay.Year <DateTime.Now.Year-120)
             {

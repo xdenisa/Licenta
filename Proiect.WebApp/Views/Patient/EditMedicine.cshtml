@@ -1,7 +1,7 @@
 ﻿@model TreatmentMedicine
 
 
-<div class="row">
+<div class="row justify-content-md-center">
     <div class="col-md-4 p-4">
         <h3>Editare medicament</h3>
         <form asp-action="EditMedicine" asp-controller="Patient">
@@ -13,22 +13,22 @@
             <div class="form-group">
                 <label asp-for="Medicine.Name" class="control-label">Denumire medicament</label>
                 <input asp-for="Medicine.Name" class="form-control" />
-                <span asp-validation-for="Medicine.Name" class="text-danger"></span>
+                <span asp-validation-for="Medicine.Name" class="text-danger">Numele medicamentului trebuie să aibă între 2 și 100 de caractere!</span>
             </div>
             <div class="form-group">
                 <label asp-for="Medicine.AdministrationMethod" class="control-label">Metodă de administrare</label>
                 <input asp-for="Medicine.AdministrationMethod" class="form-control" />
-                <span asp-validation-for="Medicine.AdministrationMethod" class="text-danger"></span>
+                <span asp-validation-for="Medicine.AdministrationMethod" class="text-danger">Metoda de administrare trebuie să aibă între 2 și 100 de caractere!</span>
             </div>
             <div class="form-group">
                 <label asp-for="Treatment.NumberOfDays" class="control-label">Zile tratament</label>
-                <input asp-for="Treatment.NumberOfDays" class="form-control" />
-                <span asp-validation-for="Treatment.NumberOfDays" class="text-danger"></span>
+                <input asp-for="Treatment.NumberOfDays" class="form-control" type="number"/>
+                <span asp-validation-for="Treatment.NumberOfDays" class="text-danger">Numărul de zile de tratament trebuie să fie între 1 și 365 de zile!</span>
             </div>
             <div class="form-group">
                 <label asp-for="Treatment.Observations" class="control-label">Observații</label>
                 <input asp-for="Treatment.Observations" class="form-control" />
-                <span asp-validation-for="Treatment.Observations" class="text-danger"></span>
+                <span asp-validation-for="Treatment.Observations" class="text-danger">Observațiile sunt opționale!</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Editează" class="btn btn-info" />

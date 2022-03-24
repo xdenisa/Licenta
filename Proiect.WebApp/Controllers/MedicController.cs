@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using Proiect.BusinessLogic;
 using Proiect.Entities;
 using Proiect.WebApp.Models;
@@ -49,7 +50,8 @@ namespace Proiect.WebApp.Controllers
             if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString && loginViewModel.Id == idPerson.ToString())
             {
                 var medic = medicService.GetMedicByPersonID(idPerson);
-                return View(medic);
+                var viewModel = mapper.Map<MedicViewModel>(medic);
+                return View(viewModel);
             }
             else
             {
@@ -78,10 +80,11 @@ namespace Proiect.WebApp.Controllers
                 {
                     var appointments = appointmentService.GetAppointmentsByMedicId(idMedic)
                     .Where(d => d.AppointmentDate < DateTime.Now);
+                    var viewModel = mapper.Map<MedicViewModel>(medic);
 
                     var appointmentViewModel = new AppointmentMedicViewModel()
                     {
-                        Medic = medic,
+                        Medic = viewModel,
                         Appointments = appointments
                     };
                     return View(appointmentViewModel);
@@ -101,7 +104,8 @@ namespace Proiect.WebApp.Controllers
         public JsonResult GetPatients(int toSkip, Guid idMedic)
         {
             var patients = appointmentService.GetAppointmentsByMedicIdJson(idMedic, toSkip, false);
-            return Json(patients);
+            var appointmentsViewModel = mapper.Map<IEnumerable<AppointmentsViewModel>>(patients);
+            return Json(appointmentsViewModel);
         }
 
         [HttpGet]
@@ -113,13 +117,10 @@ namespace Proiect.WebApp.Controllers
                 if (medic.IdPerson.ToString() == loginViewModel.Id)
                 {
                     var specializations = specializationService.GetSpecializations();
+                    var medicViewModel = mapper.Map<MedicProfileViewModel>(medic);
+                    medicViewModel.Specializations = mapper.Map<IEnumerable<SelectListItem>>(specializations);
 
-                    var profileViewModel = new MedicProfileViewModel()
-                    {
-                        Medic = medic,
-                        Specializations = mapper.Map<IEnumerable<SelectListItem>>(specializations)
-                    };
-                    return View(profileViewModel);
+                    return View(medicViewModel);
                 }
                 else
                 {
@@ -132,18 +133,15 @@ namespace Proiect.WebApp.Controllers
             }
         }
 
-        [HttpPost]
         public IActionResult ProfilePut(MedicProfileViewModel medicProfileViewModel)
         {
             if (ModelState.IsValid)
             {
                 if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
                 {
-                    if (medicProfileViewModel.Image != null)
-                    {
-                        UpdateProfilePhotoAsync(medicProfileViewModel);
-                    }
-                    medicService.UpdateMedic(medicProfileViewModel.Medic);
+                    var medic = mapper.Map<Medic>(medicProfileViewModel);
+                    var image = GetProfilePicture(medicProfileViewModel);
+                    medicService.UpdateMedic(medic, image);
                     return RedirectToAction("Profile", "Medic", new { idMedic = medicProfileViewModel.Medic.Id });
                 }
                 else
@@ -153,27 +151,34 @@ namespace Proiect.WebApp.Controllers
             }
             else
             {
+                var medic = mapper.Map<Medic>(medicProfileViewModel);
+                var medicView = mapper.Map<MedicViewModel>(medic);
+                medicProfileViewModel.Medic = medicView;
                 var specializations = specializationService.GetSpecializations();
                 medicProfileViewModel.Specializations = mapper.Map<IEnumerable<SelectListItem>>(specializations);
-                return RedirectToAction("Profile", new { idMedic = medicProfileViewModel.Medic.Id });
+                return View("Profile", medicProfileViewModel);
             }
         }
 
-        private async void UpdateProfilePhotoAsync(MedicProfileViewModel medicProfileViewModel)
+        private Image GetProfilePicture(MedicProfileViewModel medicProfileViewModel)
         {
-            var image = new Image();
-            if (ModelState.IsValid)
+            if (medicProfileViewModel.Image != null)
             {
+                var image = new Image();
                 using (var memoryStream = new MemoryStream())
                 {
-                    await medicProfileViewModel.Image.CopyToAsync(memoryStream);
+                    medicProfileViewModel.Image.CopyToAsync(memoryStream);
                     image._Image = memoryStream.ToArray();
 
                 }
                 image.MimeType = medicProfileViewModel.Image.ContentType;
-
+                image.Id = Guid.NewGuid();
                 imageService.InsertImage(image);
-                medicService.UpdateProfilePicture(medicProfileViewModel.Medic, image);
+                return image;
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -208,11 +213,13 @@ namespace Proiect.WebApp.Controllers
                     var appointments = appointmentService.GetAppointmentsByMedicId(idMedic)
                                         .Where(d => d.AppointmentDate >= DateTime.Now);
 
+                    var viewModel = mapper.Map<MedicViewModel>(medic);
                     var appointmentViewModel = new AppointmentMedicViewModel()
                     {
-                        Medic = medic,
+                        Medic = viewModel,
                         Appointments = appointments
                     };
+
                     return View(appointmentViewModel);
                 }
                 else
@@ -230,16 +237,20 @@ namespace Proiect.WebApp.Controllers
         public JsonResult GetAppointments(int toSkip, Guid idMedic)
         {
             var appointments = appointmentService.GetAppointmentsByMedicIdJson(idMedic, toSkip, true);
-            return Json(appointments);
+            var appointmentsViewModel = mapper.Map<IEnumerable<AppointmentsViewModel>>(appointments);
+            return Json(appointmentsViewModel);
         }
 
-        [HttpDelete]
+        [Route("/Medic/DeleteAppointment/{idAppointment}/{idMedic}")]
         public IActionResult DeleteAppointment(Guid idAppointment, Guid idMedic)
         {
             if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
             {
                 if (loginViewModel.Id == medicService.GetMedicPersonId(idMedic))
                 {
+                    var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+                    var config = builder.Build();
+                    appointmentService.sendEmail(idAppointment, config, "delete");
                     appointmentService.DeleteAppointment(idAppointment);
                     return RedirectToAction("Appointments", "Medic", new { idMedic = idMedic });
                 }
@@ -262,7 +273,13 @@ namespace Proiect.WebApp.Controllers
                 if (medicService.IsMedicPatient(idPatient, loginViewModel.Id))
                 {
                     var patient = patientService.GetPatientById(idPatient);
-                    return View(patient);
+                    var patientViewModel = mapper.Map<PatientViewModel>(patient);
+                    var viewModel = new HistoryViewModel
+                    {
+                        Patient = patientViewModel,
+                        IdMedic = medicService.GetMedicByPersonID(Guid.Parse(loginViewModel.Id)).Id
+                    };
+                    return View(viewModel);
                 }
                 else
                 {
@@ -284,10 +301,12 @@ namespace Proiect.WebApp.Controllers
                 {
                     var patient = patientService.GetPatientById(idPatient);
                     var history = portfolioService.GetPatientPortfolio(idPatient);
+                    var patientViewModel = mapper.Map<PatientViewModel>(patient);
                     return View(new MedicalHistoryViewModel
                     {
-                        Patient = patient,
-                        Results = history
+                        Patient = patientViewModel,
+                        Results = history,
+                        IdMedic = medicService.GetMedicByPersonID(Guid.Parse(loginViewModel.Id)).Id
                     });
                 }
                 else
@@ -310,11 +329,12 @@ namespace Proiect.WebApp.Controllers
                 {
                     var patient = patientService.GetPatientById(idPatient);
                     var history = medicineService.GetMedicines(idPatient);
+                    var patientViewModel = mapper.Map<PatientViewModel>(patient);
                     return View(new MedicalHistoryViewModel
                     {
-                        Patient = patient,
+                        Patient = patientViewModel,
                         Medicines = history,
-                        IdMedic=medicService.GetMedicByPersonID(Guid.Parse(loginViewModel.Id)).Id
+                        IdMedic = medicService.GetMedicByPersonID(Guid.Parse(loginViewModel.Id)).Id
                     });
                 }
                 else
@@ -331,39 +351,37 @@ namespace Proiect.WebApp.Controllers
         [HttpPost]
         public IActionResult AddMedicine(MedicalHistoryViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
             {
-                if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
+                if (medicService.IsMedicPatient(viewModel.IdPatient, loginViewModel.Id))
                 {
-                    if (medicService.IsMedicPatient(viewModel.IdPatient, loginViewModel.Id))
+                    var medicine = new Medicine
                     {
-                        var medicine = new Medicine
-                        {
-                            Id = Guid.NewGuid(),
-                            Name = viewModel.Name,
-                            AdministrationMethod = viewModel.Administration
-                        };
-                        medicineService.InsertMedicine(medicine);
-                        medicineService.InsertTreatment(new Treatment
-                        {
-                            Id = Guid.NewGuid(),
-                            IdMedicine = medicine.Id,
-                            IdPatient = viewModel.IdPatient,
-                            NumberOfDays = viewModel.NumberOfDays,
-                            Observations = viewModel.Observations
-                        });
-                    }
-                    else
+                        Id = Guid.NewGuid(),
+                        Name = viewModel.Name,
+                        AdministrationMethod = viewModel.Administration
+                    };
+                    medicineService.InsertMedicine(medicine);
+                    medicineService.InsertTreatment(new Treatment
                     {
-                        return View("NoAccessPage");
-                    }
+                        Id = Guid.NewGuid(),
+                        IdMedicine = medicine.Id,
+                        IdPatient = viewModel.IdPatient,
+                        NumberOfDays = viewModel.NumberOfDays,
+                        Observations = viewModel.Observations
+                    });
+
+                    return RedirectToAction("PatientMedicine", new { idPatient = viewModel.IdPatient });
                 }
                 else
                 {
                     return View("NoAccessPage");
                 }
             }
-            return RedirectToAction("PatientMedicine", new { idPatient = viewModel.IdPatient });
+            else
+            {
+                return View("NoAccessPage");
+            }
         }
 
 
@@ -376,25 +394,33 @@ namespace Proiect.WebApp.Controllers
                 {
                     if (medicService.IsMedicPatient(viewModel.IdPatient, loginViewModel.Id))
                     {
-                        var document = await GetDocument(viewModel);
-                        var result = new Result
+                        if (viewModel.Document.ContentType.Contains("pdf") || viewModel.Document.ContentType.Contains("image"))
                         {
-                            Id = Guid.NewGuid(),
-                            Document = document,
-                            MimeType = viewModel.Document.ContentType,
-                            Observations = viewModel.Observations,
-                            DateOfIssue = DateTime.Now
-                        };
+                            var document = await GetDocument(viewModel);
+                            var result = new Result
+                            {
+                                Id = Guid.NewGuid(),
+                                Document = document,
+                                MimeType = viewModel.Document.ContentType,
+                                Observations = viewModel.Observations,
+                                DateOfIssue = DateTime.Now
+                            };
 
-                        portfolioService.InsertResult(result);
+                            portfolioService.InsertResult(result);
 
-                        portfolioService.InsertPortfolio(new Portfolio
+                            portfolioService.InsertPortfolio(new Portfolio
+                            {
+                                Id = Guid.NewGuid(),
+                                IdResult = result.Id,
+                                IdPatient = viewModel.IdPatient,
+                                IdMedic = medicService.GetMedicByPersonID(Guid.Parse(loginViewModel.Id)).Id
+                            });
+                        }
+                        else
                         {
-                            Id = Guid.NewGuid(),
-                            IdResult = result.Id,
-                            IdPatient = viewModel.IdPatient,
-                            IdMedic = medicService.GetMedicByPersonID(Guid.Parse(loginViewModel.Id)).Id
-                        });
+                            return View("ErrorPage");
+                        }
+
                     }
                     else
                     {
@@ -452,7 +478,7 @@ namespace Proiect.WebApp.Controllers
                 {
                     return View(new ChangePasswordViewModel
                     {
-                        Medic=medicService.GetMedicByID(idMedic.ToString())
+                        Medic = medicService.GetMedicByID(idMedic.ToString())
                     });
                 }
                 else
@@ -549,6 +575,56 @@ namespace Proiect.WebApp.Controllers
             else
             {
                 return View(viewModel);
+            }
+        }
+
+        public ActionResult ReadDocument(Guid idDocument)
+        {
+            var document = portfolioService.GetDocument(idDocument);
+            FileResult fileResult = new FileContentResult(document.Document, document.MimeType);
+            return fileResult;
+        }
+
+
+        [HttpDelete]
+        public IActionResult DeleteMedicine(Guid idTreatment, Guid idPatient,Guid idMedic)
+        {
+            if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
+            {
+                if (loginViewModel.Id == medicService.GetMedicPersonId(idMedic))
+                {
+                    medicineService.DeleteMedicine(idTreatment);
+                    return RedirectToAction("PatientMedicine", new { idPatient = idPatient });
+                }
+                else
+                {
+                    return View("NoAccessPage");
+                }
+            }
+            else
+            {
+                return View("NoAccessPage");
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeletePortfolio(Guid idResult, Guid idPatient, Guid idMedic)
+        {
+            if (loginViewModel.IsLogedIn && loginViewModel.IsPacient == bool.FalseString)
+            {
+                if (loginViewModel.Id == medicService.GetMedicPersonId(idMedic))
+                {
+                    portfolioService.DeletePortfolio(idResult);
+                    return RedirectToAction("PatientHistory", new { idPatient = idPatient });
+                }
+                else
+                {
+                    return View("NoAccessPage");
+                }
+            }
+            else
+            {
+                return View("NoAccessPage");
             }
         }
     }

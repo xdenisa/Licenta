@@ -26,6 +26,7 @@ namespace Proiect.WebApp.Controllers
             var model = new LoginViewModel();
             model.IsPacient = bool.TrueString;
             model.IsAdmin = false;
+            model.IsValid = true;
             return View(model);
         }
 
@@ -39,6 +40,7 @@ namespace Proiect.WebApp.Controllers
                     var pacient = accountService.LoginPatient(model.Email);
                     if (pacient == null)
                     {
+                        model.IsValid = false;
                         return View(model);
                     }
                     else
@@ -53,6 +55,7 @@ namespace Proiect.WebApp.Controllers
                         }
                         else
                         {
+                            model.IsValid = false;
                             return View(model);
                         }
                     }
@@ -62,6 +65,7 @@ namespace Proiect.WebApp.Controllers
                     var medic = accountService.LoginMedic(model.Email);                   
                     if (medic == null)
                     {
+                        model.IsValid = false;
                         return View(model);
                     }
                     else
@@ -80,6 +84,7 @@ namespace Proiect.WebApp.Controllers
                         }
                         else
                         {
+                            model.IsValid = false;
                             return View(model);
                         }
                     }

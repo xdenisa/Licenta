@@ -1,5 +1,11 @@
 ﻿@model MedicalHistoryViewModel
 
+@{
+    ViewData["Title"] = "Istoric medical";
+}
+
+<partial name="_MedicPartial" model="Model.IdMedic" />
+
 <div class="container m-3">
     <form asp-action="AddMedicine" asp-controller="Medic" enctype="multipart/form-data" role="form" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -9,9 +15,11 @@
             </div>
             <div class="col">
                 <input asp-for="Administration" type="text" class="form-control" placeholder="Mod administrare">
+                <span class="text-dark">Introduceți metoda de administrare!</span>
             </div>
             <div class="col">
-                <input asp-for="NumberOfDays" type="text" class="form-control" placeholder="Zile de tratament">
+                <input asp-for="NumberOfDays" type="number" class="form-control" placeholder="Zile de tratament">
+                <span class="text-dark">Numărul de zile de tratament trebuie să fie între 1 și 365 de zile!</span>
             </div>
             <div class="col">
                 <input asp-for="Name" type="text" class="form-control" placeholder="Denumire medicament">
@@ -32,7 +40,7 @@
         {
             <div class="card text-center m-3">
                 <div class="card-header">
-                    @Model.Patient.Person.LastName @Model.Patient.Person.FirstName
+                    @Model.Patient.LastName @Model.Patient.FirstName
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">@medicine.Medicine.Name</h5>
@@ -40,6 +48,11 @@
                     <p class="card-text">@medicine.Treatment.Observations</p>
                     <a asp-action="EditMedicineMedic" asp-controller="Medic" asp-route-idMedicine="@medicine.Medicine.Id"
                        asp-route-idMedic="@Model.IdMedic" class="btn btn-outline-primary">Editează detaliile medicament</a>
+
+                    <button onclick="deleteMedicineFromPatient(`@medicine.Treatment.Id`)" id="btnDeleteMedicine"
+                            data-patient="@Model.Patient.Id" data-medic="@Model.IdMedic"  class="btn btn-outline-danger">
+                        Întrerupe medicația
+                    </button>
                 </div>
                 <div class="card-footer text-muted">
                     @medicine.Treatment.NumberOfDays zile tratament
@@ -48,3 +61,5 @@
         }
     </div>
 }
+
+<script src="~/lib/js/Delete.js"></script>

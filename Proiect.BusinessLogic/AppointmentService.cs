@@ -6,13 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
+using System.Net;
 
 namespace Proiect.BusinessLogic
 {
     public class AppointmentService : BaseService
     {
-        public AppointmentService(UnitOfWork unitOfWork) : base(unitOfWork)
+        private PatientService patientService;
+        public AppointmentService(UnitOfWork unitOfWork, PatientService patientService) : base(unitOfWork)
         {
+            this.patientService = patientService;
         }
 
         public IEnumerable<Appointment> GetAppointmentsByMedicId(Guid idMedic)
@@ -73,13 +78,13 @@ namespace Proiect.BusinessLogic
                 patients = unitOfWork.Appointments
                  .Get()
                  .Where(i => i.IdMedic == idMedic && i.AppointmentDate >= DateTime.Now)
+                  .OrderByDescending(x => x.AppointmentDate)
                  .Skip(toSkip)
                  .Take(5)
                  .Include(p => p.Patient)
                  .ThenInclude(p => p.Person)
                  .Include(m => m.Medic)
                  .ThenInclude(p => p.Person)
-                 .OrderByDescending(x => x.AppointmentDate)
                  .ToList();
             }
             else
@@ -117,13 +122,13 @@ namespace Proiect.BusinessLogic
             var appointments = unitOfWork.Appointments
                 .Get()
                 .Where(i => i.IdPatient == idPatient)
+                 .OrderByDescending(x => x.AppointmentDate)
                 .Skip(toSkip)
                 .Take(5)
                 .Include(p => p.Patient)
                 .ThenInclude(p => p.Person)
                 .Include(m => m.Medic)
                 .ThenInclude(p => p.Person)
-                .OrderByDescending(x => x.AppointmentDate)
                 .ToList();
 
             foreach (var appointment in appointments)
@@ -141,45 +146,145 @@ namespace Proiect.BusinessLogic
             return appointments;
         }
 
-        public bool CanMakeAppointment(Appointment appointment)
+        public bool CanMakeAppointment(Appointment appointment,Guid idPatient,Guid idMedic)
         {
-            try
+            if (appointment.AppointmentDate <= DateTime.Today)
+                return false;
+
+            var appointments = GetAppointmentsByPatientId(idPatient);
+            var appointmentsMedic = GetAppointmentsByMedicId(idMedic).Where(i=>i.IdPatient!=idPatient);
+
+            foreach (var app in appointments)
             {
-                var appointment2 = unitOfWork.Appointments.Get()
-                .First(a => a.AppointmentDate.Date == appointment.AppointmentDate.Date
-                && a.AppointmentDate.Hour == appointment.AppointmentDate.Hour);
-                if (appointment2.IdMedic == appointment.IdMedic && appointment2.IdPatient == appointment.IdPatient)
+                if (app.AppointmentDate.Date == appointment.AppointmentDate.Date && app.AppointmentDate.Hour == appointment.AppointmentDate.Hour)
                 {
                     return false;
                 }
-                return false;
             }
-            catch
+
+            foreach (var app in appointmentsMedic)
             {
-                return true;
+                if (app.AppointmentDate.Date == appointment.AppointmentDate.Date && app.AppointmentDate.Hour == appointment.AppointmentDate.Hour)
+                {
+                    return false;
+                }
             }
+            return true;
         }
 
-        public bool CanEditAppointment(Appointment appointment)
+        public bool CanEditAppointment(Appointment appointment,Guid idPatient,Guid idMedic)
         {
-            try
-            {
-                var appointment2 = unitOfWork.Appointments.Get()
-                    .First(a => a.AppointmentDate == appointment.AppointmentDate
-                    && a.IdMedic == appointment.IdMedic);
+            if (appointment.AppointmentDate <= DateTime.Today)
                 return false;
 
-            }
-            catch
+            var appointments = GetAppointmentsByPatientId(idPatient);
+            var appointmentsMedic = GetAppointmentsByMedicId(idMedic).Where(i => i.IdPatient != idPatient);
+
+            foreach (var app in appointmentsMedic)
             {
-                return true;
+                if (app.AppointmentDate.Date == appointment.AppointmentDate.Date && app.AppointmentDate.Hour == appointment.AppointmentDate.Hour)
+                {
+                    return false;
+                }
             }
+            return true;
         }
 
         public void EditAppointment(Appointment appointment)
         {
-            unitOfWork.Appointments.Update(appointment);
-            unitOfWork.SaveChanges();
+            using(var context=new DataAccess.EntityFramework.ProjectContext())
+            {
+                context.Appointments.Update(appointment);
+                context.SaveChanges();
+            }
+        }
+
+        public void sendEmail(Guid idAppointment, IConfigurationRoot config,String type)
+        {
+            var emailDetails = patientService.getPatientEmailByAppointment(idAppointment);
+
+            var message = new MailMessage();
+            message.From = new MailAddress(config["Username"]);
+            message.To.Add((string)(emailDetails?.GetType().GetProperty("Email").GetValue(emailDetails)));
+            switch (type)
+            {
+                case "delete":
+                    message.Subject = "Programarea a fost anulată!";
+                    message.Body = "Dorim să vă informăm că programarea din data de "
+                        + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                        + " la medicul " + emailDetails?.GetType().GetProperty("Medic").GetValue(emailDetails)
+                        + " a fost anulată!";
+
+                    sendMessage(config, message);
+
+                    message.To.RemoveAt(0);
+                    message.To.Add((string)(emailDetails?.GetType().GetProperty("MedicEmail").GetValue(emailDetails)));
+                    message.Subject = "Programarea a fost anulată!";
+                    message.Body = "Dorim să vă informăm că programarea din data de "
+                        + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                        + " a pacientului " + emailDetails?.GetType().GetProperty("Patient").GetValue(emailDetails)
+                        + " a fost anulată!";
+
+                    sendMessage(config, message);
+                    break;
+
+                case "edit":
+                    message.Subject = "Programarea a fost modificată!";
+                    message.Body = "Dorim să vă informăm că programarea din data de "
+                        + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                        + " la medicul " + emailDetails?.GetType().GetProperty("Medic").GetValue(emailDetails)
+                        + " a fost modificată!";
+
+                    sendMessage(config, message);
+
+                    message.To.RemoveAt(0);
+                    message.To.Add((string)(emailDetails?.GetType().GetProperty("MedicEmail").GetValue(emailDetails)));
+                    message.Subject = "Programarea a fost modificată!";
+                    message.Body = "Dorim să vă informăm că programarea din data de "
+                        + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                        + " a pacientului " + emailDetails?.GetType().GetProperty("Patient").GetValue(emailDetails)
+                        + " a fost modificată!";
+
+                    sendMessage(config, message);
+                    break;
+
+                case "new":
+                    message.Subject = "Programare nouă înregistrată!";
+                    message.Body = "Dorim să vă informăm că programarea din data de "
+                        + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                        + " la medicul " + emailDetails?.GetType().GetProperty("Medic").GetValue(emailDetails)
+                        + " a fost înregistrată!";
+
+                    sendMessage(config, message);
+
+                    message.To.RemoveAt(0);
+                    message.To.Add((string)(emailDetails?.GetType().GetProperty("MedicEmail").GetValue(emailDetails)));
+                    message.Subject = "Programare nouă înregistrată!";
+                    message.Body = "Dorim să vă informăm că s-a înregistrat o programare la data de "
+                        + emailDetails?.GetType().GetProperty("AppointmentDate").GetValue(emailDetails)
+                        + " a pacientului " + emailDetails?.GetType().GetProperty("Patient").GetValue(emailDetails);
+
+                    sendMessage(config, message);
+                    break;
+            }
+           
+        }
+
+        private void sendMessage(IConfigurationRoot config,MailMessage message)
+        {
+            using (var smtp = new SmtpClient
+            {
+                Host = config["Host"],
+                Port = int.Parse(config["Port"]),
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(config["Username"], config["Password"])
+            })
+            {
+                smtp.Send(message);
+                smtp.Dispose();
+            }
         }
     }
 }
